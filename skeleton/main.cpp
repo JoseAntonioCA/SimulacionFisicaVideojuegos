@@ -29,6 +29,9 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL;
+PxTransform* x, *y, *z, *origin;
+PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 
 
 // Initialize physics engine
@@ -54,6 +57,10 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	//Vector3 xAxis(10, 0, 0), yAxis(0, 10, 0), zAxis(0, 0, 10), originFrame(0, 0, 0);
+	//x = new PxTransform(xAxis.getX(), yAxis.getY(), zAxis.getZ());
+	RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
 	}
 
 
