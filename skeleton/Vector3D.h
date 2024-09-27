@@ -7,6 +7,10 @@
 class Vector3D {
 public:
 
+	float x_;  // first coordinate
+	float y_;  // second coordinate
+	float z_;  // third coordinate
+
 	Vector3D(const Vector3D& v) noexcept :
 		x_(v.getX()), y_(v.getY()), z_(v.getZ()) {
 	}
@@ -68,20 +72,7 @@ public:
 		return *this;
 	}
 
-	//// v[0] is the first coordinate and v[1] is the second
-	//inline float& operator[](int i) noexcept {
-	//	assert(i == 0 || i == 1);
-	//	return i == 0 ? x_ : y_;
-	//}
 
-	//// v[0] is the first coordinate and v[1] is the second
-	//inline const float& operator[](int i) const noexcept {
-	//	assert(i == 0 || i == 1);
-	//	return i == 0 ? x_ : y_;
-	//}
-
-
-	// ** various operations
 
 	// length of the vector
 	inline float magnitude() const {
@@ -135,10 +126,6 @@ public:
 	inline bool inRange(float x0, float x2, float y0, float y1) {
 		return x_ >= x0 && x_ <= x2 && y_ >= y0 && y_ <= y1;
 	}
-private:
-	float x_;  // first coordinate
-	float y_;  // second coordinate
-	float z_;  // third coordinate
 };
 
 // needed for printing a value of type Vector2D with std::cout.

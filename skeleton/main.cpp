@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "core.hpp"
+#include "Particle.h"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 
@@ -32,6 +33,7 @@ ContactReportCallback gContactReportCallback;
 RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL;
 PxTransform* x, *y, *z, *origin;
 PxSphereGeometry* gSphere = new PxSphereGeometry(10);
+Particle* particula;
 
 
 // Initialize physics engine
@@ -59,8 +61,13 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	//Vector3 xAxis(10, 0, 0), yAxis(0, 10, 0), zAxis(0, 0, 10), originFrame(0, 0, 0);
-	//x = new PxTransform(xAxis.getX(), yAxis.getY(), zAxis.getZ());
-	RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
+	////x = new PxTransform(xAxis.getX(), yAxis.getY(), zAxis.getZ());
+	//RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
+
+	Vector3 initialPosition(0, 0, 0);
+	Vector3 initialVel(1, 0, 0);
+	Vector3 initialAcel(1.0001, 0, 0);
+	particula = new Particle(initialPosition, initialVel, initialAcel, 0.98, false);
 	}
 
 
@@ -73,6 +80,10 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	if (particula) {
+		particula->integrateAcelerated(t);
+	}
 }
 
 // Function to clean data
@@ -80,6 +91,10 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
+
+	if (particula) {
+		delete particula;
+	}
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
