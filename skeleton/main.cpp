@@ -65,9 +65,9 @@ void initPhysics(bool interactive)
 	//RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
 
 	Vector3 initialPosition(0, 0, 0);
-	Vector3 initialVel(1, 0, 0);
-	Vector3 initialAcel(1.0001, 0, 0);
-	particula = new Particle(initialPosition, initialVel, initialAcel, 0.98, false);
+	Vector3 initialVel(1, 1, 0);
+	Vector3 initialAcel(0, 1.0001, 0);
+	particula = new Particle(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
 	}
 
 
