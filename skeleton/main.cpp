@@ -6,6 +6,9 @@
 
 #include "core.hpp"
 #include "Particle.h"
+#include "Proyectile.h"
+#include "PhysicsScene.h"
+
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 
@@ -34,7 +37,9 @@ RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL;
 PxTransform* x, *y, *z, *origin;
 PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 Particle* particula;
+Proyectile* proyectil;
 
+PhysicsScene* escena1;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -60,14 +65,17 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
+	escena1 = new PhysicsScene(10, 5, 9.8f);
+	escena1->initScene();
+
 	//Vector3 xAxis(10, 0, 0), yAxis(0, 10, 0), zAxis(0, 0, 10), originFrame(0, 0, 0);
 	////x = new PxTransform(xAxis.getX(), yAxis.getY(), zAxis.getZ());
 	//RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
 
-	Vector3 initialPosition(0, 0, 0);
-	Vector3 initialVel(1, 1, 0);
-	Vector3 initialAcel(0, 1.0001, 0);
-	particula = new Particle(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
+	//Vector3 initialPosition(0, 0, 0);
+	//Vector3 initialVel(1, 1, 0);
+	//Vector3 initialAcel(0, 1.0001, 0);
+	//proyectil = new Proyectile(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
 	}
 
 
@@ -77,13 +85,13 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-
+	escena1->updateScene(t);
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-
-	if (particula) {
-		particula->integrateAcelerated(t);
-	}
+	//escena1->eraseAllParticlesToErase();
+	/*if (proyectil) {
+		proyectil->integrateAcelerated(t);
+	}*/
 }
 
 // Function to clean data
@@ -106,12 +114,16 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
+
+	delete escena1;
 	}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
+	
+	escena1->pressKey(key, camera);
 
 	switch(toupper(key))
 	{
