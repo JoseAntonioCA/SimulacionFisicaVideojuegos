@@ -30,6 +30,11 @@ public:
 		}
 		setAcelY(gravedad * -1);
 	}
+	~Proyectile() {
+		if (renderItem) {
+			DeregisterRenderItem(renderItem);
+		}
+	}
 
 	virtual void integrate(double time) override {
 		//actualizar pos y vel de la particula de forma constante

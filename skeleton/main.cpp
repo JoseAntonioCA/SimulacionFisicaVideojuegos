@@ -88,7 +88,6 @@ void stepPhysics(bool interactive, double t)
 	escena1->updateScene(t);
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	//escena1->eraseAllParticlesToErase();
 	/*if (proyectil) {
 		proyectil->integrateAcelerated(t);
 	}*/

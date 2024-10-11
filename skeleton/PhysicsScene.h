@@ -27,13 +27,9 @@ public:
 
 	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel,
 		bool Simulado, float Masa, float Gravedad, float VelR, float VelS);
-
-	void eraseAllParticlesToErase();
 private:
 
 	vector<Particle*> sceneParticles;
-
-	list<std::vector<Particle*>::iterator> particlesToErase;
 
 	float gravity;
 

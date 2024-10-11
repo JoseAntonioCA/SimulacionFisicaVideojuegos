@@ -22,21 +22,28 @@ PhysicsScene::~PhysicsScene()
 void PhysicsScene::initScene()
 {
 
-	Vector3 initialPosition(0, 0, 0);
+	Vector3 initialPosition(5, 5, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
 	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
+	std::cout << "particula generada";
 }
 
 void PhysicsScene::updateScene(double dt)
 {
-	for (std::vector<Particle*>::iterator it = sceneParticles.begin(); it != sceneParticles.end();++it) {
-		(*it)->integrateAcelerated(dt);
-		if ((*it)->getPos().y <= 0.0f) {
-			particlesToErase.push_back(it);
+	for (auto it : sceneParticles) {
+		it->integrateAcelerated(dt);
+		std::cout << "lista llena" << std::endl;
+		if (it->getPos().y <= 0.0f) {
+			delete it;
+
+			auto ref = find(sceneParticles.begin(), sceneParticles.end(), it);
+			sceneParticles.erase(ref);
+		}
+		else {
+			it++;
 		}
 	}
-	//eraseAllParticlesToErase();
 }
 
 void PhysicsScene::pressKey(char key, const PxTransform& camera)
@@ -85,16 +92,6 @@ Proyectile* PhysicsScene::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 
 	addCreatedParticle(proj);
 	return proj;
 }
-
-void PhysicsScene::eraseAllParticlesToErase()
-{
-	while (!particlesToErase.empty()) {
-		delete (*particlesToErase.front());
-		sceneParticles.erase(particlesToErase.front());
-		particlesToErase.pop_front();
-	}
-}
-
 
 
 
