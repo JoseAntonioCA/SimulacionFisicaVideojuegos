@@ -1,44 +1,38 @@
-#include "PhysicsScene.h"
+#include "ParticlesSystem.h"
 #include "Particle.h"
 #include "Proyectile.h"
 #include "core.hpp"
 #include <iostream>
-PhysicsScene::PhysicsScene(float simulatedSpeed, float realSpeed, float gravity)
+ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity) :
+	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity)
 {
-	speedSim = simulatedSpeed / realSpeed;
-	gravitySim = pow(speedSim, 2);
-	massSim = pow((realSpeed / simulatedSpeed), 2);
-
-	gravity *= gravitySim;
 }
-PhysicsScene::~PhysicsScene()
+ParticlesSystem::~ParticlesSystem()
 {
 
-	for (auto p : sceneParticles) {
+	for (auto p : particles) {
 		delete p;
 	}
 }
 
-void PhysicsScene::initScene()
+void ParticlesSystem::initSystem()
 {
-
-	Vector3 initialPosition(5, 5, 0);
-	Vector3 initialVel(1, 1, 0);
-	Vector3 initialAcel(0, 1.0001, 0);
-	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
-	std::cout << "particula generada";
 }
 
-void PhysicsScene::updateScene(double dt)
+void ParticlesSystem::updateSystem(double dt)
 {
-	for (auto it : sceneParticles) {
+	Vector3 initialVel(1, 1, 0);
+	Vector3 initialAcel(0, 1.0001, 0);
+	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
+
+	for (auto it : particles) {
 		it->integrateAcelerated(dt);
 		std::cout << "lista llena" << std::endl;
 		if (it->getPos().y <= 0.0f) {
 			delete it;
 
-			auto ref = find(sceneParticles.begin(), sceneParticles.end(), it);
-			sceneParticles.erase(ref);
+			auto ref = find(particles.begin(), particles.end(), it);
+			particles.erase(ref);
 		}
 		else {
 			it++;
@@ -46,7 +40,7 @@ void PhysicsScene::updateScene(double dt)
 	}
 }
 
-void PhysicsScene::pressKey(char key, const PxTransform& camera)
+void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 	switch (toupper(key))
@@ -55,7 +49,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 	{
 		//Bala pistola
 		PxVec3 cameraDirection = camera.q.getBasisVector2();
-		
+
 		Vector3 initialVel(cameraDirection.x * -3,
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
@@ -80,12 +74,12 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 	}
 
 }
-void PhysicsScene::createParticle(Vector3 pos, double damping)
+void ParticlesSystem::createParticle(Vector3 pos, double damping)
 {
-	sceneParticles.push_back(new Particle(pos, Vector3(1,1,0), Vector3(0, 1.0001, 0), 0.98f, true));
+	particles.push_back(new Particle(pos, Vector3(1, 1, 0), Vector3(0, 1.0001, 0), 0.98f, true));
 }
 
-Proyectile* PhysicsScene::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel,
+Proyectile* ParticlesSystem::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel,
 	bool Simulado, float Masa, float Gravedad, float VelR, float VelS)
 {
 	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Simulado, Masa, Gravedad, VelR, VelS);
