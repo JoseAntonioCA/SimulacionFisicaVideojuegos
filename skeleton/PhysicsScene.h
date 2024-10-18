@@ -4,6 +4,7 @@
 #include "core.hpp"
 #include <list>
 #include "Particle.h"
+#include "ParticlesSystem.h"
 class Proyectile;
 
 using namespace std;
@@ -27,9 +28,11 @@ public:
 
 	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel,
 		bool Simulado, float Masa, float Gravedad, float VelR, float VelS);
+	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution);
 private:
 
 	vector<Particle*> sceneParticles;
+	vector<ParticlesSystem*> particlesSystems;
 
 	float gravity;
 

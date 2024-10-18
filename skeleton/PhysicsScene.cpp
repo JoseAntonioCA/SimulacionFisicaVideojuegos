@@ -3,11 +3,12 @@
 #include "Proyectile.h"
 #include "core.hpp"
 #include <iostream>
-PhysicsScene::PhysicsScene(float simulatedSpeed, float realSpeed, float gravity)
+PhysicsScene::PhysicsScene(float VelR, float VelS, float Gravity)
 {
-	speedSim = simulatedSpeed / realSpeed;
+	gravity = Gravity;
+	speedSim = VelS / VelR;
 	gravitySim = pow(speedSim, 2);
-	massSim = pow((realSpeed / simulatedSpeed), 2);
+	massSim = pow((VelR / VelS), 2);
 
 	gravity *= gravitySim;
 }
@@ -17,23 +18,31 @@ PhysicsScene::~PhysicsScene()
 	for (auto p : sceneParticles) {
 		delete p;
 	}
+
+	for (auto s : particlesSystems) {
+		delete s;
+	}
 }
 
 void PhysicsScene::initScene()
 {
-
-	Vector3 initialPosition(5, 5, 0);
+	Vector3 initialPosition(0, 0, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
+	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true);
+
 	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
 	std::cout << "particula generada";
 }
 
 void PhysicsScene::updateScene(double dt)
 {
+	for (auto it : particlesSystems) {
+		it->updateSystem(dt);
+	}
 	for (auto it : sceneParticles) {
 		it->integrateAcelerated(dt);
-		std::cout << "lista llena" << std::endl;
+		//std::cout << "lista llena" << std::endl;
 		if (it->getPos().y <= 0.0f) {
 			delete it;
 
@@ -91,4 +100,10 @@ Proyectile* PhysicsScene::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 
 	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Simulado, Masa, Gravedad, VelR, VelS);
 	addCreatedParticle(proj);
 	return proj;
+}
+
+ParticlesSystem* PhysicsScene::createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution) {
+	ParticlesSystem* system = new ParticlesSystem(Origin, SpeedSim, GravitySim, MassSim, Gravity, TimeSpawn, NormalDistribution);
+	particlesSystems.push_back(system);
+	return system;
 }

@@ -5,16 +5,18 @@
 #include <list>
 #include "Particle.h"
 #include <random>
+#include <chrono>
 
 class Proyectile;
 
 using namespace std;
+using namespace std::chrono;
 
 class ParticlesSystem
 {
 public:
 	ParticlesSystem() {};
-	ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float gravity);
+	ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution);
 	~ParticlesSystem();
 
 	void initSystem();
@@ -34,6 +36,14 @@ private:
 
 	vector<Particle*> particles;
 
+	bool canCreateParticle;
+
+	bool normalDistribution;
+
+	float timeSpawn;
+
+	time_point<high_resolution_clock> initialTimeSpawn;
+
 	float gravity;
 
 	float gravitySim;
@@ -44,6 +54,7 @@ private:
 
 	mt19937 _mt;
 	uniform_real_distribution<double> _u{ 0,1 };
+	normal_distribution<double> _n{ 0, 0.5f };
 
 	string _name;
 };

@@ -3,13 +3,14 @@
 #include "Proyectile.h"
 #include "core.hpp"
 #include <iostream>
-ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity) :
-	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity)
+ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution) :
+	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity), timeSpawn(TimeSpawn), normalDistribution(NormalDistribution), canCreateParticle(true)
 {
+	//initialTimeSpawn = timeSpawn;
+	initialTimeSpawn = high_resolution_clock::now();
 }
 ParticlesSystem::~ParticlesSystem()
 {
-
 	for (auto p : particles) {
 		delete p;
 	}
@@ -21,21 +22,76 @@ void ParticlesSystem::initSystem()
 
 void ParticlesSystem::updateSystem(double dt)
 {
-	Vector3 initialVel(1, 1, 0);
-	Vector3 initialAcel(0, 1.0001, 0);
-	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
+	std::random_device rd;
+	std::mt19937 gen(rd());
 
-	for (auto it : particles) {
-		it->integrateAcelerated(dt);
-		std::cout << "lista llena" << std::endl;
-		if (it->getPos().y <= 0.0f) {
-			delete it;
+	// Definimos una distribución uniforme de enteros entre 1 y 100 (inclusive)
+	std::uniform_int_distribution<> dis(1, 100);
 
-			auto ref = find(particles.begin(), particles.end(), it);
-			particles.erase(ref);
+	// Generamos un número aleatorio
+	int random_number = dis(gen);
+	int rand = std::rand();
+	if (random_number <= 75) {
+		double velX = 0.5f;
+		double velY = 3;
+		double velZ = 0.5f;
+		if (!normalDistribution) {
+			velX *= (_u(_mt) - 0.5);
+			velY *= (_u(_mt) - 0.5);
+			velZ *= (_u(_mt) - 0.5);
 		}
 		else {
-			it++;
+			velX *= (_n(_mt));
+			velY *= (_n(_mt));
+			velZ *= (_n(_mt));
+		}
+		Vector3 initialVel(velX, velY, velZ);
+		Vector3 initialAcel(0, gravity, 0);
+		Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, false, 5, gravity, 10, 5);
+		std::cout << "creado" << std::endl;
+		
+	}
+	/*if (canCreateParticle) {
+		double velX = 1;
+		double velY = 5;
+		double velZ = 0;
+		if (!normalDistribution) {
+			velX *= (_u(_mt) - 0.5);
+			velY *= (_u(_mt) - 0.5);
+			velZ *= (_u(_mt) - 0.5);
+		}
+		else {
+			velX *= (_n(_mt) - 0.5);
+			velY *= (_n(_mt) - 0.5);
+			velZ *= (_n(_mt) - 0.5);
+		}
+		Vector3 initialVel(velX, velY, velZ);
+		Vector3 initialAcel(0, gravity, 0);
+		Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
+		canCreateParticle = false;
+		initialTimeSpawn = high_resolution_clock::now();
+	}
+	else {
+		auto currentTime = high_resolution_clock::now();
+		duration<float> deltaTime = duration_cast<duration<float>>(currentTime - (initialTimeSpawn + 5));
+		if (currentTime == initialTimeSpawn + )
+	}*/
+
+	for (auto it = particles.begin(); it != particles.end(); ) {
+		Particle* particle = *it;  // Obtener el puntero de la partícula
+
+		if (particle != nullptr) {  // Verifica que la partícula no sea nula
+			particle->integrateAcelerated(dt);  // Actualiza la partícula
+			if (particle->getPos().y <= 0.0f || particle->toErase()) {
+				delete particle;  // Elimina la memoria de la partícula
+				it = particles.erase(it);  // Elimina la partícula del vector y actualiza el iterador
+			}
+			else {
+				++it;  // Solo avanza al siguiente elemento si no eliminaste el actual
+			}
+		}
+		else {
+			it = particles.erase(it);  // Si el puntero es nulo, lo eliminamos también
 		}
 	}
 }
