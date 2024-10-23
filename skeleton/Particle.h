@@ -16,9 +16,9 @@ using namespace physx;
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel) :
-		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), toerase(false) {
-		renderItem = new RenderItem(CreateShape(PxSphereGeometry(0.5f)), &pose, Vector4(1, 0, 0, 1));
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius) :
+		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), toerase(false) {
+		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
 		std::cout << "particula creada";
 	}
@@ -66,6 +66,8 @@ protected:
 	Vector3 acel;
 	bool constantAcel;
 	double damping;
+	float radius;
+
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 

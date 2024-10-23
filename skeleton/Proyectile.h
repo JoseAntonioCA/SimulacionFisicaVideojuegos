@@ -16,9 +16,9 @@ using namespace physx;
 class Proyectile : public Particle
 {
 public:
-	Proyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool Simulado, float Masa, float Gravedad, float VelR, float VelS) :
+	Proyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, bool Simulado, float Masa, float Gravedad, float VelR, float VelS) :
 		simulado(Simulado), masa(Masa), gravedad(Gravedad), velReal(VelR), velSim(VelS),
-		Particle(Pos, Vel, Acel,Damping, ConstantAcel) {
+		Particle(Pos, Vel, Acel,Damping, ConstantAcel, Radius) {
 
 		if (simulado) {
 			masa = masa * powf(velReal / velSim, 2);
