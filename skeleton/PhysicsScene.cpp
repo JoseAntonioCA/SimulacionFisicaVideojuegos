@@ -29,7 +29,7 @@ void PhysicsScene::initScene()
 	Vector3 initialPosition(0, 50, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
-	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Niebla);
+	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Fuente);
 
 	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, 0.5f, false, 5, 9.8f, 10, 5);
 	std::cout << "particula generada";

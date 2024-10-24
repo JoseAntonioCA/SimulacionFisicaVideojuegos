@@ -42,6 +42,11 @@ public:
 	}
 
 	virtual void integrateAcelerated(double time) override {
+		lifeTime -= time;
+		if (lifeTime <= 0.0f)
+		{
+			toerase = true;
+		}
 		if (constantAcel) {
 			vel = vel + (time * acel);
 			//actualizar acel de la particula de forma constante

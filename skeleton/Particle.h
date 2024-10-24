@@ -17,7 +17,7 @@ class Particle
 {
 public:
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius) :
-		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), toerase(false) {
+		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), toerase(false), lifeTime(2) {
 		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
 		std::cout << "particula creada";
@@ -50,6 +50,11 @@ public:
 		pose.p = pose.p + (vel * time);
 	}
 	virtual void integrateAcelerated(double time) {
+		lifeTime -= time;
+		if (lifeTime <= 0.0f)
+		{
+			toerase = true;
+		}
 		if (constantAcel) {
 			vel = vel + (time * acel);
 			//actualizar acel de la particula de forma constante
@@ -72,6 +77,8 @@ protected:
 	RenderItem* renderItem;
 
 	bool toerase;
+
+	double lifeTime;
 
 	//para el damping poner 0.98 para evitar problemas de desaceleracion brusca
 };
