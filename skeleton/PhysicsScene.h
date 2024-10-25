@@ -21,13 +21,13 @@ public:
 
 	void pressKey(char key, const physx::PxTransform& camera);
 
-	void createParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius);
+	void createParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad);
 	void addCreatedParticle(Particle* particle) {
 		sceneParticles.push_back(particle);
 	}
 
-	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius,
-		bool Simulado, float Masa, float Gravedad, float VelR, float VelS);
+	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+		bool Simulado, float VelR, float VelS);
 	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution, Sistema type);
 private:
 

@@ -53,7 +53,7 @@ void ParticlesSystem::generateParticleFuente() {
 	}
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, false, 5, gravity, 10, 5);
+	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, 5, gravity, false, 10, 5);
 	std::cout << "creado" << std::endl;
 }
 
@@ -72,7 +72,7 @@ void ParticlesSystem::generateParticleLluvia() {
 	}
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, false, 5, gravity, 10, 5);
+	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, 5, gravity, false, 10, 5);
 	std::cout << "creado" << std::endl;
 }
 
@@ -102,7 +102,7 @@ void ParticlesSystem::generateParticleNiebla() {
 	//le envio una gravedad modificada puesto que por ahora no hay rozamiento con el aire implementeado para modificar la  velocidad de la particula
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, -gravity*0.0095f, 0);
-	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, 0.1f);
+	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, 0.1f, 0.01f, gravity);
 	std::cout << "creado" << std::endl;
 }
 
@@ -176,17 +176,17 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 }
 
 
-Proyectile* ParticlesSystem::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius,
-	bool Simulado, float Masa, float Gravedad, float VelR, float VelS)
+Proyectile* ParticlesSystem::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+	bool Simulado, float VelR, float VelS)
 {
-	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Simulado, Masa, Gravedad, VelR, VelS);
+	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad, Simulado, VelR, VelS);
 	addCreatedParticle(proj);
 	return proj;
 }
 
-Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius)
+Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad)
 {
-	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, Radius);
+	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad);
 	addCreatedParticle(part);
 	return part;
 }

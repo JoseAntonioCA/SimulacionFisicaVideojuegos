@@ -26,12 +26,12 @@ PhysicsScene::~PhysicsScene()
 
 void PhysicsScene::initScene()
 {
-	Vector3 initialPosition(0, 50, 0);
+	Vector3 initialPosition(0, 5, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
-	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Fuente);
+	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Niebla);
 
-	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, 0.5f, false, 5, 9.8f, 10, 5);
+	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, 0.5f, 5, 9.8f, false, 10, 5);
 	std::cout << "particula generada";
 }
 
@@ -69,7 +69,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 0.5f, false, 5, 9.8f, 100, 5);
+		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 0.5f, 5, 9.8f, false, 100, 5);
 		break;
 	}
 	case '2':
@@ -81,7 +81,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 1, false, 20, 9.8f, 10, 5);
+		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 1, 20, 9.8f, false, 10, 5);
 		break;
 	}
 	default:
@@ -89,15 +89,15 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 	}
 
 }
-void PhysicsScene::createParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius)
+void PhysicsScene::createParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad)
 {
-	sceneParticles.push_back(new Particle(Pos, Vector3(1,1,0), Vector3(0, 1.0001, 0), 0.98f, true, Radius));
+	sceneParticles.push_back(new Particle(Pos, Vector3(1,1,0), Vector3(0, 1.0001, 0), 0.98f, true, Radius, Masa, Gravedad));
 }
 
-Proyectile* PhysicsScene::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius,
-	bool Simulado, float Masa, float Gravedad, float VelR, float VelS)
+Proyectile* PhysicsScene::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+	bool Simulado, float VelR, float VelS)
 {
-	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Simulado, Masa, Gravedad, VelR, VelS);
+	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad, Simulado, VelR, VelS);
 	addCreatedParticle(proj);
 	return proj;
 }

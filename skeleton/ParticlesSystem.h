@@ -36,10 +36,10 @@ public:
 		particles.push_back(particle);
 	}
 
-	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius,
-		bool Simulado, float Masa, float Gravedad, float VelR, float VelS);
+	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+		bool Simulado, float VelR, float VelS);
 
-	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius);
+	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad);
 private:
 
 	vector<Particle*> particles;
