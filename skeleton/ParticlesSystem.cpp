@@ -102,7 +102,7 @@ void ParticlesSystem::generateParticleNiebla() {
 	//le envio una gravedad modificada puesto que por ahora no hay rozamiento con el aire implementeado para modificar la  velocidad de la particula
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, -gravity*0.0095f, 0);
-	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, 0.1f, 0.01f, gravity);
+	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, 0.1f, 0.01f, gravity*0.0095f);
 	std::cout << "creado" << std::endl;
 }
 

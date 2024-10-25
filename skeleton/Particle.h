@@ -20,6 +20,7 @@ public:
 		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), masa(Masa), gravedad(Gravedad), toerase(false), lifeTime(2) {
 		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
+		setAcelY(gravedad * -1);
 		std::cout << "particula creada";
 	}
 	~Particle() {
@@ -69,6 +70,7 @@ public:
 protected:
 	Vector3 vel;
 	Vector3 acel;
+	//Vector3 force;
 	bool constantAcel;
 	double damping;
 	float radius;
