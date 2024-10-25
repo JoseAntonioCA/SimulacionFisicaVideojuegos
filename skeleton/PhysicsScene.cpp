@@ -26,10 +26,11 @@ PhysicsScene::~PhysicsScene()
 
 void PhysicsScene::initScene()
 {
-	Vector3 initialPosition(0, 5, 0);
+	Vector3 initialPosition(0, 1, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
-	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Niebla);
+	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Fuente);
+	systema->initSystem();
 
 	Proyectile* proyectil = createNewProyectile(initialPosition, initialVel, initialAcel, 0.98, true, 0.5f, 5, 9.8f, false, 10, 5);
 	std::cout << "particula generada";
@@ -41,7 +42,7 @@ void PhysicsScene::updateScene(double dt)
 		it->updateSystem(dt);
 	}
 	for (auto it : sceneParticles) {
-		it->integrateAcelerated(dt);
+		it->integrate(dt);
 		//std::cout << "lista llena" << std::endl;
 		if (it->getPos().y <= 0.0f) {
 			delete it;

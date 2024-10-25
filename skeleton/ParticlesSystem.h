@@ -4,15 +4,17 @@
 #include "core.hpp"
 #include <list>
 #include "Particle.h"
+
+#include "ForceGenerator.h"
+#include "GravityForceGenerator.h"
 #include <random>
-#include <chrono>
 
 class Proyectile;
 
 using namespace std;
-using namespace std::chrono;
 
 enum Sistema{Fuente, Lluvia, Niebla};
+enum GeneradorFuerzas { Gravedad, Viento, Torbellino };
 
 class ParticlesSystem
 {
@@ -36,13 +38,21 @@ public:
 		particles.push_back(particle);
 	}
 
+	void addCreatedForceGenerator(ForceGenerator* forceGenerator) {
+		forceGenerators.push_back(forceGenerator);
+	}
+
 	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
 		bool Simulado, float VelR, float VelS);
 
 	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad);
+
+
+	ForceGenerator* createNewForceGenerator(GeneradorFuerzas type);
 private:
 
 	vector<Particle*> particles;
+	vector<ForceGenerator*> forceGenerators;
 
 	bool canCreateParticle;
 

@@ -125,7 +125,7 @@ void ParticlesSystem::updateSystem(double dt)
 		Particle* particle = *it;  // Obtener el puntero de la partícula
 
 		if (particle != nullptr) {  // Verifica que la partícula no sea nula
-			particle->integrateAcelerated(dt);  // Actualiza la partícula
+			particle->integrate(dt);  // Actualiza la partícula
 			if (particle->getPos().y <= 0.0f || particle->toErase()) {
 				delete particle;  // Elimina la memoria de la partícula
 				it = particles.erase(it);  // Elimina la partícula del vector y actualiza el iterador

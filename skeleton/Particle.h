@@ -17,7 +17,8 @@ class Particle
 {
 public:
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad) :
-		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), masa(Masa), gravedad(Gravedad), toerase(false), lifeTime(2) {
+		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), masa(Masa), gravedad(Gravedad),
+		accumulatedForce(Vector3 (0,0,0)), toerase(false), lifeTime(2) {
 		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
 		setAcelY(gravedad * -1);
@@ -29,8 +30,16 @@ public:
 		}
 	}
 
+	void addForce(Vector3 force) {
+		accumulatedForce += force;
+	}
+
 	void setAcelY(float acelY) {
 		acel.y = acelY;
+	}
+
+	float getMasa() {
+		return masa;
 	}
 
 	Vector3 getPos() {
@@ -47,10 +56,10 @@ public:
 	}
 
 	virtual void integrate(double time) {
-		//actualizar pos y vel de la particula de forma constante
-		pose.p = pose.p + (vel * time);
-	}
-	virtual void integrateAcelerated(double time) {
+		if (masa <= 0.0f) return;
+
+		//acel = accumulatedForce / masa;
+
 		lifeTime -= time;
 		if (lifeTime <= 0.0f)
 		{
@@ -66,11 +75,12 @@ public:
 			//actualizar acel de la particula de forma no constante
 			pose.p = pose.p + (vel * time);
 		}
+		accumulatedForce = Vector3(0, 0, 0);
 	}
 protected:
 	Vector3 vel;
 	Vector3 acel;
-	//Vector3 force;
+	Vector3 accumulatedForce;
 	bool constantAcel;
 	double damping;
 	float radius;
