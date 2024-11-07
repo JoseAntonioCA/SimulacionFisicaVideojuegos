@@ -35,29 +35,6 @@ public:
 			DeregisterRenderItem(renderItem);
 		}
 	}
-
-	//virtual void integrate(double time) override {
-	//	//actualizar pos y vel de la particula de forma constante
-	//	pose.p = pose.p + (vel * time);
-	//}
-
-	//virtual void integrateAcelerated(double time) override {
-	//	lifeTime -= time;
-	//	if (lifeTime <= 0.0f)
-	//	{
-	//		toerase = true;
-	//	}
-	//	if (constantAcel) {
-	//		vel = vel + (time * acel);
-	//		//actualizar acel de la particula de forma constante
-	//		pose.p = pose.p + (vel * time);
-	//	}
-	//	else {
-	//		vel = vel * powf(damping, time);
-	//		//actualizar acel de la particula de forma no constante
-	//		pose.p = pose.p + (vel * time);
-	//	}
-	//}
 private:
 	bool simulado;
 

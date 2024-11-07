@@ -42,6 +42,10 @@ public:
 		return masa;
 	}
 
+	Vector3 getVel() {
+		return vel;
+	}
+
 	Vector3 getPos() {
 		return pose.p;
 	}
@@ -58,7 +62,7 @@ public:
 	virtual void integrate(double time) {
 		if (masa <= 0.0f) return;
 
-		//acel = accumulatedForce / masa;
+		acel = accumulatedForce / masa;
 
 		lifeTime -= time;
 		if (lifeTime <= 0.0f)

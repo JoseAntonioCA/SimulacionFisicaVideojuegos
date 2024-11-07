@@ -7,6 +7,9 @@
 
 #include "ForceGenerator.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
+#include "ExplosionForceGenerator.h"
 #include <random>
 
 class Proyectile;
@@ -14,7 +17,7 @@ class Proyectile;
 using namespace std;
 
 enum Sistema{Fuente, Lluvia, Niebla};
-enum GeneradorFuerzas { Gravedad, Viento, Torbellino };
+enum GeneradorFuerzas { Gravedad, Viento, Torbellino, Explosion };
 
 class ParticlesSystem
 {
@@ -53,14 +56,13 @@ private:
 
 	vector<Particle*> particles;
 	vector<ForceGenerator*> forceGenerators;
+	ForceGenerator* forceGenerator;
 
 	bool canCreateParticle;
 
 	bool normalDistribution;
 
 	float timeSpawn;
-
-	time_point<high_resolution_clock> initialTimeSpawn;
 
 	float gravity;
 

@@ -29,6 +29,7 @@ void PhysicsScene::initScene()
 	Vector3 initialPosition(0, 1, 0);
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
+	//Para la niebla, modificar aqui la gravedad a una mucho menor hasta que no se aplique rozamiento con el aire
 	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, speedSim, gravitySim, massSim, 9.8f, 0.0f, true, Fuente);
 	systema->initSystem();
 
@@ -58,6 +59,9 @@ void PhysicsScene::updateScene(double dt)
 
 void PhysicsScene::pressKey(char key, const PxTransform& camera)
 {
+	for (auto it : particlesSystems) {
+		it->pressKey(key, camera);
+	}
 	PX_UNUSED(camera);
 	switch (toupper(key))
 	{

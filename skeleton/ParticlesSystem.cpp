@@ -6,8 +6,6 @@
 ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution, Sistema type) :
 	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity), timeSpawn(TimeSpawn), normalDistribution(NormalDistribution), tipoSistema(type), canCreateParticle(true)
 {
-	//initialTimeSpawn = timeSpawn;
-	initialTimeSpawn = high_resolution_clock::now();
 }
 ParticlesSystem::~ParticlesSystem()
 {
@@ -18,6 +16,14 @@ ParticlesSystem::~ParticlesSystem()
 
 void ParticlesSystem::initSystem()
 {
+	ForceGenerator* fg = createNewForceGenerator(Gravedad);
+	std::cout << "creada Gravedad" << std::endl;
+	ForceGenerator* fg2 = createNewForceGenerator(Viento);
+	std::cout << "creado Viento" << std::endl;
+	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
+	std::cout << "creado Torbellino" << std::endl;
+	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
+	std::cout << "creada Explosion" << std::endl;*/
 }
 
 void ParticlesSystem::particlesGenerator() {
@@ -125,6 +131,14 @@ void ParticlesSystem::updateSystem(double dt)
 		Particle* particle = *it;  // Obtener el puntero de la partícula
 
 		if (particle != nullptr) {  // Verifica que la partícula no sea nula
+
+			for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+				ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+				fG->applyForce(particle);
+				fG->update(dt);
+				it2++;
+			}
+			
 			particle->integrate(dt);  // Actualiza la partícula
 			if (particle->getPos().y <= 0.0f || particle->toErase()) {
 				delete particle;  // Elimina la memoria de la partícula
@@ -154,7 +168,8 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 0.5f, false, 5, 9.8f, 100, 5);
+		
+		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 0.5f, 5, gravity, false, 100, 5);
 		break;
 	}
 	case '2':
@@ -166,7 +181,7 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 1, false, 20, 9.8f, 10, 5);
+		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 1, 20, gravity, false, 10, 5);
 		break;
 	}
 	default:
@@ -189,4 +204,24 @@ Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 A
 	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad);
 	addCreatedParticle(part);
 	return part;
+}
+
+ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
+{
+	ForceGenerator* forceGen;
+	switch (type) {
+	case Gravedad:
+		forceGen = new GravityForceGenerator(gravity);
+		break;
+	case Viento:
+		forceGen = new WindForceGenerator(Vector3(30,0,0), 2, 0);
+		break;
+	case Torbellino:
+		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 50);
+		break;
+	case Explosion:
+		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 20, 0.1f);
+	}
+	addCreatedForceGenerator(forceGen);
+	return forceGen;
 }
