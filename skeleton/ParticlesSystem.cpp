@@ -218,7 +218,7 @@ ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
 		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
 		break;
 	case Explosion:
-		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 20, 0.1f);
+		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 20, 0.01f);
 	}
 	addCreatedForceGenerator(forceGen);
 	return forceGen;

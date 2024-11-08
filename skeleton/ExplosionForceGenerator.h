@@ -37,14 +37,14 @@
 class ExplosionForceGenerator : public ForceGenerator
 {
 public:
-    ExplosionForceGenerator(const Vector3& center, float K, float initialRadius, float decayRate)
-        : center(center), K(K), initialK(K), radius(initialRadius), decayTime(decayRate), timeElapsed(0) {}
+    ExplosionForceGenerator(const Vector3& center, float K, float initialRadius, float T)
+        : center(center), K(K), initialK(K), radius(initialRadius), T(T), timeElapsed(0) {}
 
     virtual void applyForce(Particle* particle) override {
         Vector3 direction = particle->getPos() - center;
         float distance = direction.magnitude();
         if (distance < radius && distance > 0) { // Asegurarse de que esté dentro del radio y evitar división por cero
-            float decayFactor = exp(-timeElapsed / decayTime);
+            float decayFactor = exp(-timeElapsed / T);
             Vector3 force = (K / (distance * distance)) * direction * decayFactor;
             particle->addForce(force);
         }
@@ -61,7 +61,7 @@ private:
     float K; // Constante de intensidad de la explosión, actualizada
     float initialK; // Almacena el valor inicial de K
     float radius;
-    float decayTime; // constante de tiempo de la explosión
+    float T; // constante de tiempo de la explosión
     float timeElapsed; // Tiempo acumulado desde el inicio de la explosión
 
 };
