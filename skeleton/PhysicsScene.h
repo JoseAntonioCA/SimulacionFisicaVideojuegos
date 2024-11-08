@@ -11,7 +11,7 @@ class PhysicsScene
 {
 public:
 	PhysicsScene() {};
-	PhysicsScene(float VelR, float VelS, float gravity);
+	PhysicsScene(bool simulado, float gravity);
 	~PhysicsScene();
 
 	void initScene();
@@ -26,7 +26,7 @@ public:
 		sceneParticles.push_back(particle);
 	}
 
-	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
+	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
 private:
 
 	vector<Particle*> sceneParticles;
@@ -34,8 +34,6 @@ private:
 
 	float gravity;
 
-	float gravitySim;
-	float massSim;
-	float speedSim;
+	bool simulado;
 };
 

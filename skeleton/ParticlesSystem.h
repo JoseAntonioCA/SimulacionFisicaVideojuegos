@@ -21,7 +21,7 @@ class ParticlesSystem
 {
 public:
 	ParticlesSystem() {};
-	ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
+	ParticlesSystem(Vector3 Origin, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
 	~ParticlesSystem();
 
 	void initSystem();
@@ -63,10 +63,6 @@ private:
 	float timeSpawn;
 
 	float gravity;
-
-	float gravitySim;
-	float massSim;
-	float speedSim;
 
 	Vector3 origen;
 	Sistema tipoSistema;

@@ -63,7 +63,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	escena1 = new PhysicsScene(10, 5, 9.8f);
+	escena1 = new PhysicsScene(false, 9.8f);
 	escena1->initScene();
 
 	//Vector3 xAxis(10, 0, 0), yAxis(0, 10, 0), zAxis(0, 0, 10), originFrame(0, 0, 0);

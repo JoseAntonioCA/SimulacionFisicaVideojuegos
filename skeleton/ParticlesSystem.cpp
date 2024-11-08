@@ -1,8 +1,8 @@
 #include "ParticlesSystem.h"
 #include "core.hpp"
 #include <iostream>
-ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type) :
-	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity), timeSpawn(TimeSpawn), simulado(Simulado), normalDistribution(NormalDistribution), tipoSistema(type), canCreateParticle(true)
+ParticlesSystem::ParticlesSystem(Vector3 Origin, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type) :
+	origen(Origin), gravity(Gravity), timeSpawn(TimeSpawn), simulado(Simulado), normalDistribution(NormalDistribution), tipoSistema(type), canCreateParticle(true)
 {
 	
 }
