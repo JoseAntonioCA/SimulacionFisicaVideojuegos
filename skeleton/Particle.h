@@ -16,13 +16,24 @@ using namespace physx;
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad) :
-		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), radius(Radius), masa(Masa), gravedad(Gravedad),
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad, bool Simulado, float VelR, float VelS) :
+		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), canHaveAccForce(CanHaveAccForce), radius(Radius), masa(Masa), gravedad(Gravedad),
+		simulado(Simulado), velReal(VelR), velSim(VelS),
 		accumulatedForce(Vector3 (0,0,0)), toerase(false), lifeTime(2) {
+
+		if (simulado) {
+			masa = masa * powf(velReal / velSim, 2);
+			gravedad = gravedad * powf(velSim / velReal, 2);
+			vel = vel * velSim;
+		}
+		else {
+			vel = vel * velReal;
+		}
+
 		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
 		setAcelY(gravedad * -1);
-		std::cout << "particula creada";
+		//std::cout << "particula creada";
 	}
 	~Particle() {
 		if (renderItem) {
@@ -46,6 +57,14 @@ public:
 		return vel;
 	}
 
+	float getVelR() {
+		return velReal;
+	}
+
+	float getVelS() {
+		return velSim;
+	}
+
 	Vector3 getPos() {
 		return pose.p;
 	}
@@ -62,7 +81,8 @@ public:
 	virtual void integrate(double time) {
 		if (masa <= 0.0f) return;
 
-		acel = accumulatedForce / masa;
+		if (canHaveAccForce)
+			acel = accumulatedForce / masa;
 
 		lifeTime -= time;
 		if (lifeTime <= 0.0f)
@@ -82,22 +102,31 @@ public:
 		accumulatedForce = Vector3(0, 0, 0);
 	}
 protected:
-	Vector3 vel;
-	Vector3 acel;
-	Vector3 accumulatedForce;
-	bool constantAcel;
-	double damping;
-	float radius;
-	float masa;
-	float gravedad;
+	Vector3 vel; //Velocidad de la particula
+	Vector3 acel; //Aceleracion de la particula, si se aplican fuerzas acumuladas, esta se ve modificada por la formula a = F*m
+	Vector3 accumulatedForce; //Fuerza acumulada de la particula
+	bool constantAcel; //Determina si se puede usar aceleracion constante o en cambio se usara el Damping
 
-	physx::PxTransform pose;
-	RenderItem* renderItem;
-
-	bool toerase;
-
-	double lifeTime;
+	bool canHaveAccForce; //Determina si se pueden usar fuerzas acumuladas o no
 
 	//para el damping poner 0.98 para evitar problemas de desaceleracion brusca
+	double damping; //Variable que hace que la particula frene/desacelere de manera mas realista
+	float radius; //Radio del tamanyo de la particula (De momento son todas esferas
+	float masa; //Masa de la particula
+	float gravedad; //Gravedad que le aplicamos a la particula y que afecta al eje Y de la aceleracion, si no se usan fuerzas acumuladas
+
+	physx::PxTransform pose; //Posicion de la particula
+	RenderItem* renderItem; //Render de la particula
+
+	bool toerase; //Determina si la particula debe ser eliminada o no
+
+	double lifeTime; //Tiempo de vida de la particula
+
+	//Variables para la simulacion
+	bool simulado; //Determina si la velocidad y la gravedad deberan de ser simuladas o no
+
+	float velReal; //Velocidad real
+	float velSim; //Velocidad simulada
+
 };
 

@@ -5,7 +5,6 @@
 #include <list>
 #include "Particle.h"
 #include "ParticlesSystem.h"
-class Proyectile;
 
 using namespace std;
 class PhysicsScene
@@ -21,14 +20,13 @@ public:
 
 	void pressKey(char key, const physx::PxTransform& camera);
 
-	void createParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad);
+	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad,
+		bool Simulado, float VelR, float VelS);
 	void addCreatedParticle(Particle* particle) {
 		sceneParticles.push_back(particle);
 	}
 
-	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
-		bool Simulado, float VelR, float VelS);
-	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution, Sistema type);
+	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
 private:
 
 	vector<Particle*> sceneParticles;

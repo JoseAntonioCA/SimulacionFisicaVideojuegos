@@ -6,7 +6,6 @@
 
 #include "core.hpp"
 #include "Particle.h"
-#include "Proyectile.h"
 #include "PhysicsScene.h"
 
 #include "RenderUtils.hpp"
@@ -37,7 +36,6 @@ RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL;
 PxTransform* x, *y, *z, *origin;
 PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 Particle* particula;
-Proyectile* proyectil;
 
 PhysicsScene* escena1;
 

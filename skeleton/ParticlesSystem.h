@@ -12,8 +12,6 @@
 #include "ExplosionForceGenerator.h"
 #include <random>
 
-class Proyectile;
-
 using namespace std;
 
 enum Sistema{Fuente, Lluvia, Niebla};
@@ -23,7 +21,7 @@ class ParticlesSystem
 {
 public:
 	ParticlesSystem() {};
-	ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution, Sistema type);
+	ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
 	~ParticlesSystem();
 
 	void initSystem();
@@ -45,10 +43,8 @@ public:
 		forceGenerators.push_back(forceGenerator);
 	}
 
-	Proyectile* createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad,
 		bool Simulado, float VelR, float VelS);
-
-	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad);
 
 
 	ForceGenerator* createNewForceGenerator(GeneradorFuerzas type);
@@ -61,6 +57,8 @@ private:
 	bool canCreateParticle;
 
 	bool normalDistribution;
+
+	bool simulado;
 
 	float timeSpawn;
 

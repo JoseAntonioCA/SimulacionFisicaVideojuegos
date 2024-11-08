@@ -1,11 +1,10 @@
 #include "ParticlesSystem.h"
-#include "Particle.h"
-#include "Proyectile.h"
 #include "core.hpp"
 #include <iostream>
-ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool NormalDistribution, Sistema type) :
-	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity), timeSpawn(TimeSpawn), normalDistribution(NormalDistribution), tipoSistema(type), canCreateParticle(true)
+ParticlesSystem::ParticlesSystem(Vector3 Origin, float SpeedSim, float GravitySim, float MassSim, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type) :
+	origen(Origin), speedSim(SpeedSim), gravitySim(GravitySim), massSim(MassSim), gravity(Gravity), timeSpawn(TimeSpawn), simulado(Simulado), normalDistribution(NormalDistribution), tipoSistema(type), canCreateParticle(true)
 {
+	
 }
 ParticlesSystem::~ParticlesSystem()
 {
@@ -57,10 +56,13 @@ void ParticlesSystem::generateParticleFuente() {
 		velY *= (_n(_mt));
 		velZ *= (_n(_mt));
 	}
+
+	float masa = 5.0f;
+	float velReal = 10.0f;
+	float velSim = 5.0f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, 5, gravity, false, 10, 5);
-	std::cout << "creado" << std::endl;
+	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, 0.98, true, true, 0.25f, masa, gravity, simulado, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleLluvia() {
@@ -76,10 +78,13 @@ void ParticlesSystem::generateParticleLluvia() {
 		origen.z = (_nNiebla(_mt));
 		velY *= (_n(_mt));
 	}
+
+	float masa = 5.0f;
+	float velReal = 10.0f;
+	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	Proyectile* proyectil = createNewProyectile(origen, initialVel, initialAcel, 0.98, true, 0.25f, 5, gravity, false, 10, 5);
-	std::cout << "creado" << std::endl;
+	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, 0.98, true, true, 0.25f, 5, gravity, simulado, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleNiebla() {
@@ -106,10 +111,10 @@ void ParticlesSystem::generateParticleNiebla() {
 	}
 
 	//le envio una gravedad modificada puesto que por ahora no hay rozamiento con el aire implementeado para modificar la  velocidad de la particula
+	float masa = 0.01f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, -gravity*0.0095f, 0);
-	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, 0.1f, 0.01f, gravity*0.0095f);
-	std::cout << "creado" << std::endl;
+	Particle* particula = createNewParticle(origen, initialVel, initialAcel, 0.98, true, true, 0.1f, masa, gravity*0.0095f, false, 1.0f, 0.5f);
 }
 
 void ParticlesSystem::updateSystem(double dt)
@@ -169,7 +174,7 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
 		
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 0.5f, 5, gravity, false, 100, 5);
+		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, 0.98, true, true, 0.5f, 5, gravity, false, 100, 5);
 		break;
 	}
 	case '2':
@@ -181,7 +186,7 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Proyectile* proyectil = createNewProyectile(camera.p, initialVel, initialAcel, 0.98, true, 1, 20, gravity, false, 10, 5);
+		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, 0.98, true, true, 1, 20, gravity, false, 10, 5);
 		break;
 	}
 	default:
@@ -190,18 +195,10 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 
 }
 
-
-Proyectile* ParticlesSystem::createNewProyectile(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad,
+Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad,
 	bool Simulado, float VelR, float VelS)
 {
-	Proyectile* proj = new Proyectile(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad, Simulado, VelR, VelS);
-	addCreatedParticle(proj);
-	return proj;
-}
-
-Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, float Radius, float Masa, float Gravedad)
-{
-	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, Radius, Masa, Gravedad);
+	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, CanHaveAccForce, Radius, Masa, Gravedad, Simulado, VelR, VelS);
 	addCreatedParticle(part);
 	return part;
 }
@@ -211,13 +208,14 @@ ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
 	ForceGenerator* forceGen;
 	switch (type) {
 	case Gravedad:
-		forceGen = new GravityForceGenerator(gravity);
+
+		forceGen = new GravityForceGenerator(gravity, simulado);
 		break;
 	case Viento:
 		forceGen = new WindForceGenerator(Vector3(30,0,0), 2, 0);
 		break;
 	case Torbellino:
-		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 50);
+		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
 		break;
 	case Explosion:
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 20, 0.1f);
