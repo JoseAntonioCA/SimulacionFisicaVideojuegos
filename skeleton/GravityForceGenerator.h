@@ -21,7 +21,7 @@ public:
 		Vector3 force = gravity * particle->getMasa();
 		particle->addForce(force);
 	}
-	void update(float deltaTime) {}
+	void update(double deltaTime) {}
 private:
 	Vector3 gravity;
 	bool simulado;

@@ -22,7 +22,7 @@ public:
 		Vector3 force = tangentialVel - particle->getVel();
 		particle->addForce(force);
 	}
-	void update(float deltaTime) {}
+	void update(double deltaTime) {}
 private:
 	Vector3 center;
 	float k;

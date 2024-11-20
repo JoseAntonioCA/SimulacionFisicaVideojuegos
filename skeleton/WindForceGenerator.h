@@ -19,7 +19,7 @@ public:
 		Vector3 force = k1* relativeVel + k2 * relativeVel.magnitude() * relativeVel;
 		particle->addForce(force);
 	}
-	void update(float deltaTime) {}
+	void update(double deltaTime) {}
 private:
 	Vector3 velocity;
 	float k1;

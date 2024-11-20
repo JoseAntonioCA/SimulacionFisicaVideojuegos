@@ -22,7 +22,7 @@ void PhysicsScene::initScene()
 	Vector3 initialVel(1, 1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);
 	//Para la niebla, modificar aqui la gravedad a una mucho menor hasta que no se aplique rozamiento con el aire
-	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f, 0.0f, false, true, Fuente);
+	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f * 0.000000001f, 0.0f, false, true, Niebla);
 	systema->initSystem();
 
 	Particle* proyectil = createNewParticle(initialPosition, initialVel, initialAcel, 0.98, true, false, 0.5f, 5, 9.8f, false, 10, 5);

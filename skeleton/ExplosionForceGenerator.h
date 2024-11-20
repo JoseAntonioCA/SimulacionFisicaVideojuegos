@@ -38,30 +38,32 @@ class ExplosionForceGenerator : public ForceGenerator
 {
 public:
     ExplosionForceGenerator(const Vector3& center, float K, float initialRadius, float T)
-        : center(center), K(K), initialK(K), radius(initialRadius), T(T), timeElapsed(0) {}
+        : center(center), K(K), radius(initialRadius), T(T), timeElapsed(0), speedRange(300) {}
 
     virtual void applyForce(Particle* particle) override {
+
         Vector3 direction = particle->getPos() - center;
-        float distance = direction.magnitude();
-        if (distance < radius && distance > 0) { // Asegurarse de que esté dentro del radio y evitar división por cero
-            float decayFactor = exp(-timeElapsed / T);
-            Vector3 force = (K / (distance * distance)) * direction * decayFactor;
-            particle->addForce(force);
+        float r = direction.magnitude();
+
+        Vector3 force = Vector3(0, 0, 0);
+        if (r < radius) {
+            force = (K / pow(r, 2)) * direction * exp(-(timeElapsed / T));
         }
-        //K = initialK * exp(-timeElapsed / decayRate);
+
+        particle->addForce(force);
     }
 
-    void update(float deltaTime) {
-        timeElapsed += deltaTime;
-        //radius += 2 * deltaTime; // Expansión del radio
+    void update(double deltaTime) {
+        timeElapsed += (deltaTime/100);
+        radius += speedRange; //Aqui se supone que la explosion se expande por el aumento del radio de alcance
     }
 
 private:
     Vector3 center;
     float K; // Constante de intensidad de la explosión, actualizada
-    float initialK; // Almacena el valor inicial de K
-    float radius;
-    float T; // constante de tiempo de la explosión
-    float timeElapsed; // Tiempo acumulado desde el inicio de la explosión
+    float radius; //Radio de alcance de la explosion
+    float T; // Constante de tiempo de la explosión
+    float speedRange; // Velocidad que aumenta el radio de alcance
+    float timeElapsed; // Tiempo que ha pasado desde el inicio de la explosion
 
 };
