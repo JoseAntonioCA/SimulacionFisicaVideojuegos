@@ -55,7 +55,7 @@ public:
 
     void update(double deltaTime) {
         timeElapsed += (deltaTime/100);
-        radius += speedRange; //Aqui se supone que la explosion se expande por el aumento del radio de alcance
+        radius += speedRange * timeElapsed; //Aqui se supone que la explosion se expande por el aumento del radio de alcance
     }
 
 private:
