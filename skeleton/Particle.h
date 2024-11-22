@@ -16,10 +16,10 @@ using namespace physx;
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad, bool Simulado, float VelR, float VelS) :
-		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), damping(Damping), constantAcel(ConstantAcel), canHaveAccForce(CanHaveAccForce), radius(Radius), masa(Masa), gravedad(Gravedad),
-		simulado(Simulado), velReal(VelR), velSim(VelS),
-		accumulatedForce(Vector3 (0,0,0)), toerase(false), lifeTime(2) {
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado, float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS) :
+		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), constantAcel(ConstantAcel), canHaveAccForce(CanHaveAccForce), simulado(Simulado),
+		radius(Radius), masa(Masa), gravedad(Gravedad), damping(Damping), lifeTime(LifeTime), velReal(VelR), velSim(VelS),
+		accumulatedForce(Vector3 (0,0,0)), toerase(false) {
 
 		if (simulado) {
 			masa = masa * powf(velReal / velSim, 2);

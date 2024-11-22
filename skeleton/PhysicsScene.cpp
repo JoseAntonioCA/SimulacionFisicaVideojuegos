@@ -25,7 +25,7 @@ void PhysicsScene::initScene()
 	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f * 0.000000001f, 0.0f, false, true, Niebla);
 	systema->initSystem();
 
-	Particle* proyectil = createNewParticle(initialPosition, initialVel, initialAcel, 0.98, true, false, 0.5f, 5, 9.8f, false, 10, 5);
+	Particle* proyectil = createNewParticle(initialPosition, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 	std::cout << "particula generada";
 }
 
@@ -66,7 +66,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, 0.98, true, false, 0.5f, 5, 9.8f, false, 100, 5);
+		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
 		break;
 	}
 	case '2':
@@ -78,7 +78,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, 0.98, true, false, 1, 20, 9.8f, false, 10, 5);
+		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 		break;
 	}
 	default:
@@ -86,10 +86,10 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 	}
 
 }
-Particle* PhysicsScene::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, double Damping, bool ConstantAcel, bool CanHaveAccForce, float Radius, float Masa, float Gravedad,
-	bool Simulado, float VelR, float VelS)
+Particle* PhysicsScene::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
+	float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS)
 {
-	Particle* part = new Particle(Pos, Vel, Acel, Damping, ConstantAcel, CanHaveAccForce, Radius, Masa, Gravedad, Simulado, VelR, VelS);
+	Particle* part = new Particle(Pos, Vel, Acel, ConstantAcel, CanHaveAccForce, Simulado, Radius, Masa, Gravedad, Damping, LifeTime , VelR, VelS);
 	addCreatedParticle(part);
 	return part;
 }

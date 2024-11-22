@@ -7,33 +7,6 @@
 #include "ForceGenerator.h"
 #include "Particle.h"
 
-
-//class ExplosionForceGenerator : public ForceGenerator
-//{
-//public:
-//	ExplosionForceGenerator() {}
-//	ExplosionForceGenerator(Vector3 Center, float K) : center(Center), k(K) {}
-//
-//	virtual void applyForce(Particle* particle) override {
-//		Vector3 direction = particle->getPos() - center;
-//		float distance = direction.magnitude();
-//		if (distance == 0) return;  // Evita la división por cero en el centro
-//		Vector3 tangentialVel = Vector3(-direction.z, 0, direction.x).getNormalized() * k * distance;
-//		Vector3 force = tangentialVel - particle->getVel();
-//		particle->addForce(force);
-//	}
-//private:
-//	Vector3 center; //Centro Explosion
-//	float k; //Intensidad Explosion
-//	float t; //Constante tiempo de la explosion
-//	float initRadius; //Radio inicial de la explosion
-//	float expSpeed; //Velocidad explosion
-//	float startTime; //Tiempo inicio explosion
-//};
-
-
-
-
 class ExplosionForceGenerator : public ForceGenerator
 {
 public:
