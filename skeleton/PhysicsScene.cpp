@@ -35,7 +35,7 @@ void PhysicsScene::initScene()
 	//ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f /* * 0.000000001f*/, 0.0f, false, true, Lluvia);
 	//systema->initSystem();
 
-	Particle* proyectil = createNewParticle(initialPosition, Vector3(0,0,0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 10, 10, 5);
+	Particle* proyectil = createNewParticle(initialPosition, Vector3(0,0,0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
 	std::cout << "particula generada";
 
 	//Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
@@ -44,7 +44,7 @@ void PhysicsScene::initScene()
 	float masa = 5.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
-	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 10, velReal, velSim);
+	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
 	std::cout << "particula generada";
 }
 
@@ -111,6 +111,26 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 		break;
 	}
+	case '3':
+	{
+		for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+			ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+			fG->update2(Vector3(0,0,0), 10);
+			it2++;
+		}
+		cout << "Sumada K de elasticidad del muelle" << endl;
+		break;
+	}
+	case '4':
+	{
+		for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+			ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+			fG->update2(Vector3(0, 0, 0), -10);
+			it2++;
+		}
+		cout << "Restada K de elasticidad del muelle" << endl;
+		break;
+	}
 	default:
 		break;
 	}
@@ -148,7 +168,7 @@ ForceGenerator* PhysicsScene::createNewForceGenerator(GeneradorFuerzas type)
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
 		break;
 	case Muelle:
-		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), 100);
+		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, 100, 0);
 		break;
 	}
 	addCreatedForceGenerator(forceGen);

@@ -23,6 +23,7 @@ public:
 		particle->addForce(force);
 	}
 	void update(double deltaTime) {}
+	void update2(Vector3 v, float f) {}
 private:
 	Vector3 center;
 	float k;

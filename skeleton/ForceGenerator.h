@@ -13,6 +13,7 @@ public:
 
 	virtual void applyForce(Particle* particle) = 0;
 	virtual void update(double deltaTime) = 0;
+	virtual void update2(Vector3 v, float f) = 0;
 
 };
 

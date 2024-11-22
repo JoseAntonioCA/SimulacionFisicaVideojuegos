@@ -223,7 +223,7 @@ ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
 		break;
 	case Muelle:
-		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), 5);
+		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, 10, 0);
 		break;
 	}
 	addCreatedForceGenerator(forceGen);

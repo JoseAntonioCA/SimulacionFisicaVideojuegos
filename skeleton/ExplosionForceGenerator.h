@@ -30,6 +30,7 @@ public:
         timeElapsed += (deltaTime/100);
         radius += speedRange * timeElapsed; //Aqui se supone que la explosion se expande por el aumento del radio de alcance
     }
+    void update2(Vector3 v, float f) {}
 
 private:
     Vector3 center;
