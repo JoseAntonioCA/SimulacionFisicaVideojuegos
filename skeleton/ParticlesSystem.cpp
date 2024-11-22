@@ -21,8 +21,10 @@ void ParticlesSystem::initSystem()
 	std::cout << "creado Viento" << std::endl;
 	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
 	std::cout << "creado Torbellino" << std::endl;*/
-	ForceGenerator* fg4 = createNewForceGenerator(Explosion);
-	std::cout << "creada Explosion" << std::endl;
+	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
+	std::cout << "creada Explosion" << std::endl;*/
+	ForceGenerator* fg5 = createNewForceGenerator(Muelle);
+	std::cout << "creado Muelle" << std::endl;
 }
 
 void ParticlesSystem::particlesGenerator() {
@@ -84,7 +86,7 @@ void ParticlesSystem::generateParticleLluvia() {
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 2, velReal, velSim);
+	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 10, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleNiebla() {
@@ -219,6 +221,10 @@ ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
 		break;
 	case Explosion:
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
+		break;
+	case Muelle:
+		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), 5);
+		break;
 	}
 	addCreatedForceGenerator(forceGen);
 	return forceGen;

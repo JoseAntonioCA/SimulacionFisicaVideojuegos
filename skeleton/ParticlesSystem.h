@@ -10,12 +10,13 @@
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
 #include <random>
 
 using namespace std;
 
 enum Sistema{Fuente, Lluvia, Niebla};
-enum GeneradorFuerzas { Gravedad, Viento, Torbellino, Explosion };
+enum GeneradorFuerzas { Gravedad, Viento, Torbellino, Explosion, Muelle };
 
 class ParticlesSystem
 {

@@ -6,7 +6,17 @@
 #include "Particle.h"
 #include "ParticlesSystem.h"
 
+#include "ForceGenerator.h"
+#include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
+#include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
+
 using namespace std;
+
+//enum GeneradorFuerzas { Gravedad, Viento, Torbellino, Explosion, Muelle };
+
 class PhysicsScene
 {
 public:
@@ -27,10 +37,19 @@ public:
 	}
 
 	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
+
+	ForceGenerator* createNewForceGenerator(GeneradorFuerzas type);
+
+	void addCreatedForceGenerator(ForceGenerator* forceGenerator) {
+		forceGenerators.push_back(forceGenerator);
+	}
+
 private:
 
 	vector<Particle*> sceneParticles;
 	vector<ParticlesSystem*> particlesSystems;
+
+	vector<ForceGenerator*> forceGenerators;
 
 	float gravity;
 

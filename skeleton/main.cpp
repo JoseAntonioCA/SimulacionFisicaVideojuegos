@@ -65,15 +65,6 @@ void initPhysics(bool interactive)
 
 	escena1 = new PhysicsScene(false, 9.8f);
 	escena1->initScene();
-
-	//Vector3 xAxis(10, 0, 0), yAxis(0, 10, 0), zAxis(0, 0, 10), originFrame(0, 0, 0);
-	////x = new PxTransform(xAxis.getX(), yAxis.getY(), zAxis.getZ());
-	//RenderItem* sphereX = new RenderItem(CreateShape(PxSphereGeometry(5)), new PxTransform(0,0,0), Vector4(1, 0, 0, 1));
-
-	//Vector3 initialPosition(0, 0, 0);
-	//Vector3 initialVel(1, 1, 0);
-	//Vector3 initialAcel(0, 1.0001, 0);
-	//proyectil = new Proyectile(initialPosition, initialVel, initialAcel, 0.98, true, false, 5, 9.8f, 10, 5);
 	}
 
 
@@ -86,9 +77,6 @@ void stepPhysics(bool interactive, double t)
 	escena1->updateScene(t);
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	/*if (proyectil) {
-		proyectil->integrateAcelerated(t);
-	}*/
 }
 
 // Function to clean data

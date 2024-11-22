@@ -18,14 +18,33 @@ PhysicsScene::~PhysicsScene()
 
 void PhysicsScene::initScene()
 {
-	Vector3 initialPosition(0, 1, 0);
-	Vector3 initialVel(1, 1, 0);
-	Vector3 initialAcel(0, 1.0001, 0);
-	//Para la niebla, modificar aqui la gravedad a una mucho menor hasta que no se aplique rozamiento con el aire
-	ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f * 0.000000001f, 0.0f, false, true, Niebla);
-	systema->initSystem();
+	ForceGenerator* fg = createNewForceGenerator(Gravedad);
+	std::cout << "creada Gravedad" << std::endl;
+	ForceGenerator* fg2 = createNewForceGenerator(Muelle);
+	std::cout << "creado Muelle" << std::endl;
+	ForceGenerator* fg3 = createNewForceGenerator(Viento);
+	std::cout << "creado Viento" << std::endl;
 
-	Particle* proyectil = createNewParticle(initialPosition, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
+	Vector3 initialPosition(0, 50, 0);
+	/*Vector3 initialVel(0, -1, 0);
+	Vector3 initialAcel(0, 1.0001, 0);*/
+	Vector3 initialVel(0, -1, 0);
+	Vector3 initialAcel(0, gravity, 0);
+
+	////Para la niebla, modificar aqui la gravedad a una mucho menor hasta que no se aplique rozamiento con el aire
+	//ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f /* * 0.000000001f*/, 0.0f, false, true, Lluvia);
+	//systema->initSystem();
+
+	Particle* proyectil = createNewParticle(initialPosition, Vector3(0,0,0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 10, 10, 5);
+	std::cout << "particula generada";
+
+	//Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
+
+
+	float masa = 5.0f;
+	float velReal = 10.0f;
+	float velSim = 5.0f;
+	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 10, velReal, velSim);
 	std::cout << "particula generada";
 }
 
@@ -34,17 +53,28 @@ void PhysicsScene::updateScene(double dt)
 	for (auto it : particlesSystems) {
 		it->updateSystem(dt);
 	}
-	for (auto it : sceneParticles) {
-		it->integrate(dt);
-		//std::cout << "lista llena" << std::endl;
-		if (it->getPos().y <= 0.0f) {
-			delete it;
+	for (auto it = sceneParticles.begin(); it != sceneParticles.end(); ) {
+		Particle* particle = *it;
+		if (particle != nullptr) {  // Verifica que la partícula no sea nula
 
-			auto ref = find(sceneParticles.begin(), sceneParticles.end(), it);
-			sceneParticles.erase(ref);
+			for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+				ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+				fG->applyForce(particle);
+				fG->update(dt);
+				it2++;
+			}
+
+			particle->integrate(dt);  // Actualiza la partícula
+			if (particle->getPos().y <= 0.0f || particle->toErase()) {
+				delete particle;  // Elimina la memoria de la partícula
+				it = sceneParticles.erase(it);  // Elimina la partícula del vector y actualiza el iterador
+			}
+			else {
+				++it;  // Solo avanza al siguiente elemento si no eliminaste el actual
+			}
 		}
 		else {
-			it++;
+			it = sceneParticles.erase(it);  // Si el puntero es nulo, lo eliminamos también
 		}
 	}
 }
@@ -98,4 +128,29 @@ ParticlesSystem* PhysicsScene::createNewParticlesSystem(Vector3 Origin, float Gr
 	ParticlesSystem* system = new ParticlesSystem(Origin, Gravity, TimeSpawn, Simulado, NormalDistribution, type);
 	particlesSystems.push_back(system);
 	return system;
+}
+
+ForceGenerator* PhysicsScene::createNewForceGenerator(GeneradorFuerzas type)
+{
+	ForceGenerator* forceGen;
+	switch (type) {
+	case Gravedad:
+
+		forceGen = new GravityForceGenerator(gravity, simulado);
+		break;
+	case Viento:
+		forceGen = new WindForceGenerator(Vector3(500, 0, 0), 2, 0);
+		break;
+	case Torbellino:
+		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
+		break;
+	case Explosion:
+		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
+		break;
+	case Muelle:
+		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), 100);
+		break;
+	}
+	addCreatedForceGenerator(forceGen);
+	return forceGen;
 }
