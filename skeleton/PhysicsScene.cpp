@@ -25,7 +25,7 @@ void PhysicsScene::initScene()
 	/*ForceGenerator* fg3 = createNewForceGenerator(Viento);
 	std::cout << "creado Viento" << std::endl;*/
 
-	Vector3 initialPosition(0, 50, 0);
+	Vector3 initialPosition(0, 40, 0);
 	/*Vector3 initialVel(0, -1, 0);
 	Vector3 initialAcel(0, 1.0001, 0);*/
 	Vector3 initialVel(0, -1, 0);
@@ -35,7 +35,7 @@ void PhysicsScene::initScene()
 	//ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f /* * 0.000000001f*/, 0.0f, false, true, Lluvia);
 	//systema->initSystem();
 
-	Particle* proyectil = createNewParticle(initialPosition, Vector3(0,0,0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
+	Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
 	std::cout << "particula generada";
 
 	//Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
@@ -51,6 +51,10 @@ void PhysicsScene::initScene()
 	addCreatedForceGenerator(gfg);
 	SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, 50, 10);
 	addCreatedForceGenerator(sfg);
+	AnchoredSpringFG* asfg = new AnchoredSpringFG(300, 1, Vector3(0, 30, 0));
+	addCreatedForceGenerator(asfg);
+	addCreatedParticle(asfg->returnOther());
+	
 }
 
 void PhysicsScene::updateScene(double dt)

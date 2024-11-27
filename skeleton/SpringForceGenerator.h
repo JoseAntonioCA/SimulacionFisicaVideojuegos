@@ -37,7 +37,7 @@ public:
 	void update2(Vector3 v, float Kplus) {
 		K += Kplus;
 	}
-private:
+protected:
 	Vector3 origen;
 	double K;
 	double resting_length;
