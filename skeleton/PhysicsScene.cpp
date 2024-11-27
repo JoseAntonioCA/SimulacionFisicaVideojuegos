@@ -1,7 +1,7 @@
 #include "PhysicsScene.h"
 #include "core.hpp"
 #include <iostream>
-PhysicsScene::PhysicsScene(bool Simulado, float Gravity) : simulado(Simulado), gravity(Simulado)
+PhysicsScene::PhysicsScene(bool Simulado, float Gravity) : simulado(Simulado), gravity(Gravity)
 {
 }
 PhysicsScene::~PhysicsScene()
@@ -18,12 +18,12 @@ PhysicsScene::~PhysicsScene()
 
 void PhysicsScene::initScene()
 {
-	ForceGenerator* fg = createNewForceGenerator(Gravedad);
-	std::cout << "creada Gravedad" << std::endl;
-	ForceGenerator* fg2 = createNewForceGenerator(Muelle);
-	std::cout << "creado Muelle" << std::endl;
-	ForceGenerator* fg3 = createNewForceGenerator(Viento);
-	std::cout << "creado Viento" << std::endl;
+	/*ForceGenerator* fg = createNewForceGenerator(Gravedad);
+	std::cout << "creada Gravedad" << std::endl;*/
+	/*ForceGenerator* fg2 = createNewForceGenerator(Muelle);
+	std::cout << "creado Muelle" << std::endl;*/
+	/*ForceGenerator* fg3 = createNewForceGenerator(Viento);
+	std::cout << "creado Viento" << std::endl;*/
 
 	Vector3 initialPosition(0, 50, 0);
 	/*Vector3 initialVel(0, -1, 0);
@@ -46,6 +46,11 @@ void PhysicsScene::initScene()
 	float velSim = 5.0f;
 	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
 	std::cout << "particula generada";
+
+	GravityForceGenerator *gfg = new GravityForceGenerator(gravity, simulado);
+	addCreatedForceGenerator(gfg);
+	SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, 50, 10);
+	addCreatedForceGenerator(sfg);
 }
 
 void PhysicsScene::updateScene(double dt)
@@ -65,7 +70,7 @@ void PhysicsScene::updateScene(double dt)
 			}
 
 			particle->integrate(dt);  // Actualiza la partícula
-			if (particle->getPos().y <= 0.0f || particle->toErase()) {
+			if (/*particle->getPos().y <= 0.0f || */ particle->toErase()) {
 				delete particle;  // Elimina la memoria de la partícula
 				it = sceneParticles.erase(it);  // Elimina la partícula del vector y actualiza el iterador
 			}

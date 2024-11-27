@@ -18,7 +18,8 @@ public:
 		if (simulado) {
 			gravity = gravity * powf(particle->getVelS() / particle->getVelR(), 2);
 		}
-		Vector3 force = gravity * particle->getMasa();
+		Vector3 force;
+		force = gravity * particle->getMasa();
 		particle->addForce(force);
 	}
 	void update(double deltaTime) {}

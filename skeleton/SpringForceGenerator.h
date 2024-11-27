@@ -18,16 +18,18 @@ public:
 		Vector3 relative_pos_vector;
 		if (other != nullptr) {
 			relative_pos_vector = other->getPos() - particle->getPos();
+			
 		}
 		else
 			relative_pos_vector = particle->getPos() - origen;
+
 
 		Vector3 force;
 
 		const float length = relative_pos_vector.normalize();
 		const float delta_x = length - resting_length;
 
-		force = -K * delta_x * relative_pos_vector;
+		force = K * delta_x * relative_pos_vector;
 		particle->addForce(force);
 	}
 
