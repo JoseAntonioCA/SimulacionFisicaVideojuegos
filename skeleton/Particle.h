@@ -30,6 +30,8 @@ public:
 			vel = vel * velReal;
 		}
 
+		//PxGeometry cubo = PxBoxGeometry;
+
 		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
 
 		setAcelY(gravedad * -1);

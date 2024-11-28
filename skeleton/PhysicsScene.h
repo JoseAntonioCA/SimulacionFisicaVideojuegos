@@ -13,6 +13,9 @@
 #include "ExplosionForceGenerator.h"
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringFG.h"
+#include "GomuGomuFG.h"
+
+#include "ForceRegistry.h"
 
 using namespace std;
 
@@ -51,6 +54,7 @@ private:
 	vector<ParticlesSystem*> particlesSystems;
 
 	vector<ForceGenerator*> forceGenerators;
+	ForceRegistry forceRegistries;
 
 	float gravity;
 
