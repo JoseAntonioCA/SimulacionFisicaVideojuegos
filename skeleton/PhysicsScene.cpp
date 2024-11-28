@@ -35,8 +35,8 @@ void PhysicsScene::initScene()
 	//ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f /* * 0.000000001f*/, 0.0f, false, true, Lluvia);
 	//systema->initSystem();
 
-	Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
-	std::cout << "particula generada";
+	/*Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
+	std::cout << "particula generada";*/
 
 	//Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 
@@ -47,13 +47,15 @@ void PhysicsScene::initScene()
 	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
 	std::cout << "particula generada";
 
-	Particle* proyectil3 = createNewParticle(Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
-	std::cout << "particula generada";
+	/*Particle* proyectil3 = createNewParticle(Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
+	std::cout << "particula generada";*/
 
 	GravityForceGenerator *gfg = new GravityForceGenerator(gravity, simulado);
 	addCreatedForceGenerator(gfg);
-	forceRegistries.addRegistry(proyectil2, gfg);
-	forceRegistries.addRegistry(proyectil3, gfg);
+	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(30, 1000, 0.05f);
+	addCreatedForceGenerator(bfg);
+	/*forceRegistries.addRegistry(proyectil2, gfg);
+	forceRegistries.addRegistry(proyectil3, gfg);*/
 	/*SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, 50, 10);
 	addCreatedForceGenerator(sfg);
 	SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, 50, 10);
@@ -64,23 +66,20 @@ void PhysicsScene::initScene()
 	addCreatedForceGenerator(sfg4);*/
 
 
-	GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
+	/*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
 	addCreatedForceGenerator(sfg);
 	GomuGomuFG* sfg2 = new GomuGomuFG(Vector3(0, 0, 0), proyectil, 50, 10);
 	addCreatedForceGenerator(sfg2);
 	GomuGomuFG* sfg3 = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
 	addCreatedForceGenerator(sfg3);
 	GomuGomuFG* sfg4 = new GomuGomuFG(Vector3(0, 0, 0), proyectil3, 50, 10);
-	addCreatedForceGenerator(sfg4);
+	addCreatedForceGenerator(sfg4);*/
 
-	forceRegistries.addRegistry(proyectil, sfg);
+	/*forceRegistries.addRegistry(proyectil, sfg);
 	forceRegistries.addRegistry(proyectil2, sfg2);
 	forceRegistries.addRegistry(proyectil3, sfg3);
-	forceRegistries.addRegistry(proyectil2, sfg4);
-	/*AnchoredSpringFG* asfg = new AnchoredSpringFG(300, 1, Vector3(0, 30, 0));
-	addCreatedForceGenerator(asfg);
-	forceRegistries.addRegistry(proyectil3, asfg);*/
-	//addCreatedParticle(asfg->returnOther());
+	forceRegistries.addRegistry(proyectil2, sfg4);*/
+	
 	
 }
 
@@ -93,13 +92,13 @@ void PhysicsScene::updateScene(double dt)
 		Particle* particle = *it;
 		if (particle != nullptr) {  // Verifica que la partícula no sea nula
 
-			forceRegistries.updateForces(dt);
-			//for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
-			//	ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
-			//	fG->applyForce(particle);
-			//	fG->update(dt);
-			//	it2++;
-			//}
+			//forceRegistries.updateForces(dt);
+			for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+				ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+				fG->applyForce(particle);
+				fG->update(dt);
+				it2++;
+			}
 
 			particle->integrate(dt);  // Actualiza la partícula
 			if (/*particle->getPos().y <= 0.0f || */ particle->toErase()) {

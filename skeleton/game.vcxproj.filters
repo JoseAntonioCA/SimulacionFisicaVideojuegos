@@ -22,6 +22,7 @@
     <ClCompile Include="AnchoredSpringFG.cpp" />
     <ClCompile Include="ForceRegistry.cpp" />
     <ClCompile Include="GomuGomuFG.cpp" />
+    <ClCompile Include="BuoyancyForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="ForceRegistry.h" />
     <ClInclude Include="GomuGomuFG.h" />
+    <ClInclude Include="BuoyancyForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

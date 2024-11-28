@@ -14,6 +14,7 @@
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringFG.h"
 #include "GomuGomuFG.h"
+#include "BuoyancyForceGenerator.h"
 
 #include "ForceRegistry.h"
 
