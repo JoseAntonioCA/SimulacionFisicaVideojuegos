@@ -6,7 +6,6 @@ PhysicsScene::PhysicsScene(bool Simulado, float Gravity) : simulado(Simulado), g
 }
 PhysicsScene::~PhysicsScene()
 {
-
 	for (auto p : sceneParticles) {
 		delete p;
 	}
@@ -18,16 +17,9 @@ PhysicsScene::~PhysicsScene()
 
 void PhysicsScene::initScene()
 {
-	/*ForceGenerator* fg = createNewForceGenerator(Gravedad);
-	std::cout << "creada Gravedad" << std::endl;*/
-	/*ForceGenerator* fg2 = createNewForceGenerator(Muelle);
-	std::cout << "creado Muelle" << std::endl;*/
-	/*ForceGenerator* fg3 = createNewForceGenerator(Viento);
-	std::cout << "creado Viento" << std::endl;*/
 
-	Vector3 initialPosition(0, 40, 0);
-	/*Vector3 initialVel(0, -1, 0);
-	Vector3 initialAcel(0, 1.0001, 0);*/
+	Vector3 initialPosition(0, 50, 0);
+	/*Vector3 initialAcel(0, 1.0001, 0);*/
 	Vector3 initialVel(0, -1, 0);
 	Vector3 initialAcel(0, gravity, 0);
 
@@ -38,24 +30,22 @@ void PhysicsScene::initScene()
 	/*Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
 	std::cout << "particula generada";*/
 
-	//Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
-
-
-	float masa = 5.0f;
+	float masa = 25.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
-	Particle* proyectil2 = createNewParticle(initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
-	std::cout << "particula generada";
+	Particle* proyectil2 = createNewParticle(Esfera, initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
+	std::cout << "particula 'proyectil2' generada";
 
-	/*Particle* proyectil3 = createNewParticle(Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
-	std::cout << "particula generada";*/
+	///*Particle* proyectil3 = createNewParticle(Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
+	//std::cout << "particula generada";*/
 
 	GravityForceGenerator *gfg = new GravityForceGenerator(gravity, simulado);
 	addCreatedForceGenerator(gfg);
-	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(30, 1000, 0.05f);
+	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(30, 0.1f, 1000);
 	addCreatedForceGenerator(bfg);
 	/*forceRegistries.addRegistry(proyectil2, gfg);
 	forceRegistries.addRegistry(proyectil3, gfg);*/
+
 	/*SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, 50, 10);
 	addCreatedForceGenerator(sfg);
 	SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, 50, 10);
@@ -132,7 +122,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
+		Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
 		break;
 	}
 	case '2':
@@ -144,7 +134,7 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
+		Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 		break;
 	}
 	case '3':
@@ -172,10 +162,10 @@ void PhysicsScene::pressKey(char key, const PxTransform& camera)
 	}
 
 }
-Particle* PhysicsScene::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
+Particle* PhysicsScene::createNewParticle(FormaParticula Forma, Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
 	float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS)
 {
-	Particle* part = new Particle(Pos, Vel, Acel, ConstantAcel, CanHaveAccForce, Simulado, Radius, Masa, Gravedad, Damping, LifeTime , VelR, VelS);
+	Particle* part = new Particle(Forma, Pos, Vel, Acel, ConstantAcel, CanHaveAccForce, Simulado, Radius, Masa, Gravedad, Damping, LifeTime , VelR, VelS);
 	addCreatedParticle(part);
 	return part;
 }

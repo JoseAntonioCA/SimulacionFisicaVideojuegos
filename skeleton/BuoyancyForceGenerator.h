@@ -6,13 +6,20 @@ class BuoyancyForceGenerator : public ForceGenerator
 {
 public:
 	BuoyancyForceGenerator(float h, float V, float d) : height(h), volume(V), liquid_density(d) {
+		Vector3 initialPosition(0, 30, 0);
+		Vector3 initialVel(0, 0, 0);
+		Vector3 initialAcel(0, 0, 0);
 
+
+		float masa = 0;
+		float velReal = 1;
+		float velSim = 1;
+		liquid_particle = new Particle(Plano, initialPosition, initialVel, initialAcel, true, false, false, 10, masa, 0, 0.98, 100, velReal, velSim);
 	}
 
 	virtual void applyForce(Particle* particle) {
 		float h = particle->getPos().y;
-		//float h0 = liquid_particle->getPos().y;
-		float h0 = 30.0f;
+		float h0 = liquid_particle->getPos().y;
 
 
 		Vector3 force(0, 0, 0);
@@ -22,6 +29,7 @@ public:
 			immersed = 0.0f;
 		}
 		else if (h0 - h > height * 0.5f) {
+			//Totally immersed
 			immersed = 1.0f;
 		}
 		else {

@@ -23,8 +23,8 @@ void ParticlesSystem::initSystem()
 	std::cout << "creado Torbellino" << std::endl;*/
 	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
 	std::cout << "creada Explosion" << std::endl;*/
-	ForceGenerator* fg5 = createNewForceGenerator(Muelle);
-	std::cout << "creado Muelle" << std::endl;
+	/*ForceGenerator* fg5 = createNewForceGenerator(Muelle);
+	std::cout << "creado Muelle" << std::endl;*/
 }
 
 void ParticlesSystem::particlesGenerator() {
@@ -64,7 +64,7 @@ void ParticlesSystem::generateParticleFuente() {
 	float velSim = 5.0f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 2, velReal, velSim);
+	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 2, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleLluvia() {
@@ -86,7 +86,7 @@ void ParticlesSystem::generateParticleLluvia() {
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	Particle* proyectil = createNewParticle(origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 10, velReal, velSim);
+	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 10, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleNiebla() {
@@ -116,7 +116,7 @@ void ParticlesSystem::generateParticleNiebla() {
 	float masa = 0.01f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, -gravity*0.0095f, 0);
-	Particle* particula = createNewParticle(origen, initialVel, initialAcel, true, true, false, 0.1f, masa, gravity*0.0095f, 0.98, 2, 1.0f, 0.5f);
+	Particle* particula = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, false, 0.1f, masa, gravity*0.0095f, 0.98, 2, 1.0f, 0.5f);
 }
 
 void ParticlesSystem::updateSystem(double dt)
@@ -176,7 +176,7 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
 		
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
+		Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
 		break;
 	}
 	case '2':
@@ -188,7 +188,7 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 			cameraDirection.y * -3,
 			cameraDirection.z * -3);
 		Vector3 initialAcel(0, 1.0001, 0);
-		Particle* proyectil = createNewParticle(camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
+		Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
 		break;
 	}
 	default:
@@ -197,10 +197,10 @@ void ParticlesSystem::pressKey(char key, const PxTransform& camera)
 
 }
 
-Particle* ParticlesSystem::createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
+Particle* ParticlesSystem::createNewParticle(FormaParticula Forma, Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
 	float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS)
 {
-	Particle* part = new Particle(Pos, Vel, Acel, ConstantAcel, CanHaveAccForce, Simulado, Radius, Masa, Gravedad, Damping, LifeTime, VelR, VelS);
+	Particle* part = new Particle(Forma, Pos, Vel, Acel, ConstantAcel, CanHaveAccForce, Simulado, Radius, Masa, Gravedad, Damping, LifeTime, VelR, VelS);
 	addCreatedParticle(part);
 	return part;
 }

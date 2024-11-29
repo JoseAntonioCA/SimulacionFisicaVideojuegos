@@ -44,7 +44,7 @@ public:
 		forceGenerators.push_back(forceGenerator);
 	}
 
-	Particle* createNewParticle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
+	Particle* createNewParticle(FormaParticula Forma, Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado,
 		float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS);
 
 

@@ -11,12 +11,15 @@
 
 #include <iostream>
 
+
 using namespace physx;
+
+enum FormaParticula {Cubo, Esfera, Plano};
 
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado, float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS) :
+	Particle(FormaParticula Forma, Vector3 Pos, Vector3 Vel, Vector3 Acel, bool ConstantAcel, bool CanHaveAccForce, bool Simulado, float Radius, float Masa, float Gravedad, double Damping, double LifeTime, float VelR, float VelS) :
 		pose(physx::PxTransform(Pos.x, Pos.y, Pos.z)), vel(Vel), acel(Acel), constantAcel(ConstantAcel), canHaveAccForce(CanHaveAccForce), simulado(Simulado),
 		radius(Radius), masa(Masa), gravedad(Gravedad), damping(Damping), lifeTime(LifeTime), velReal(VelR), velSim(VelS),
 		accumulatedForce(Vector3 (0,0,0)), toerase(false) {
@@ -30,9 +33,23 @@ public:
 			vel = vel * velReal;
 		}
 
-		//PxGeometry cubo = PxBoxGeometry;
+		switch (Forma)
+		{
+		case Cubo:
+			renderItem = new RenderItem(CreateShape(PxBoxGeometry(radius, radius, radius)), &pose, Vector4(1, 0, 0, 1));
+			break;
+		case Esfera:
+			renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
+			break;
+		case Plano:
+			//renderItem = new RenderItem(CreateShape(PxPlaneGeometry()), &pose, Vector4(1, 0, 0, 1));
+			renderItem = new RenderItem(CreateShape(PxBoxGeometry(radius, 0.001, radius)), &pose, Vector4(1, 0, 0, 1));
 
-		renderItem = new RenderItem(CreateShape(PxSphereGeometry(radius)), &pose, Vector4(1, 0, 0, 1));
+			break;
+		default:
+			break;
+		}
+
 
 		setAcelY(gravedad * -1);
 		//std::cout << "particula creada";
@@ -92,7 +109,7 @@ public:
 			toerase = true;
 		}
 		if (constantAcel) {
-			vel = vel + (time * acel);
+			vel = (vel /** powf(damping, time)*/ + (time * acel))/** powf(damping, time)*/;
 			//actualizar acel de la particula de forma constante
 			pose.p = pose.p + (vel * time);
 		}

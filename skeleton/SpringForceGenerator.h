@@ -18,7 +18,6 @@ public:
 		Vector3 relative_pos_vector;
 		if (other != nullptr) {
 			relative_pos_vector = other->getPos() - particle->getPos();
-			
 		}
 		else
 			relative_pos_vector = particle->getPos() - origen;
