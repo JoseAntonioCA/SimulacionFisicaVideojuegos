@@ -18,7 +18,7 @@ PhysicsScene::~PhysicsScene()
 void PhysicsScene::initScene()
 {
 
-	Vector3 initialPosition(0, 50, 0);
+	Vector3 initialPosition(0, 40, 0);
 	/*Vector3 initialAcel(0, 1.0001, 0);*/
 	Vector3 initialVel(0, -1, 0);
 	Vector3 initialAcel(0, gravity, 0);
@@ -30,7 +30,7 @@ void PhysicsScene::initScene()
 	/*Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
 	std::cout << "particula generada";*/
 
-	float masa = 25.0f;
+	float masa = 800.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
 	Particle* proyectil2 = createNewParticle(Esfera, initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
@@ -41,8 +41,18 @@ void PhysicsScene::initScene()
 
 	GravityForceGenerator *gfg = new GravityForceGenerator(gravity, simulado);
 	addCreatedForceGenerator(gfg);
-	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(30, 0.1f, 1000);
+
+	float height = 10.0f;          // Altura del cubo
+	float volume = 1.0f;           // Volumen de la particula (simplificado)
+	float liquid_density = 1000.0f; // Densidad del agua
+	float gravity = 9.8f;
+	Vector3 surfacePosition(0, 30, 0);  // Nivel de la superficie del agua
+
+	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(height, volume, liquid_density, gravity, surfacePosition);
 	addCreatedForceGenerator(bfg);
+
+	//BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(10, 1, 1000);
+	//addCreatedForceGenerator(bfg);
 	/*forceRegistries.addRegistry(proyectil2, gfg);
 	forceRegistries.addRegistry(proyectil3, gfg);*/
 
