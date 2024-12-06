@@ -6,6 +6,7 @@
 
 #include "core.hpp"
 #include "Particle.h"
+#include "SolidoRigido.h"
 #include "PhysicsScene.h"
 
 #include "RenderUtils.hpp"
@@ -36,7 +37,6 @@ RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL;
 PxTransform* x, *y, *z, *origin;
 PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 Particle* particula;
-
 PhysicsScene* escena1;
 
 // Initialize physics engine
@@ -62,6 +62,24 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	/*PxRigidStatic* solidoStatico = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
+	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	solidoStatico->attachShape(*shape);
+	gScene->addActor(*solidoStatico);
+	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });*/
+
+	SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, CUBO, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);
+
+	/*PxRigidDynamic* solidoDinamico = gPhysics->createRigidDynamic(physx::PxTransform(0, 0, 0));
+	solidoDinamico->setLinearVelocity({ 0,0,0 });
+	solidoDinamico->setAngularVelocity({ 0,3,0 });
+	PxShape* shape2 = CreateShape(PxBoxGeometry(10, 10, 10));
+	solidoDinamico->attachShape(*shape2);
+
+	PxRigidBodyExt::updateMassAndInertia(*solidoDinamico, 0.15);
+	gScene->addActor(*solidoDinamico);
+	RenderItem* item2 = new RenderItem(shape2, solidoDinamico, { 0.1,0.1,0.1,1 });*/
 
 	escena1 = new PhysicsScene(false, 9.8f);
 	escena1->initScene();
