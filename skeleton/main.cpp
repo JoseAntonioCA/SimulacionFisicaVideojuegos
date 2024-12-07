@@ -63,14 +63,13 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	/*PxRigidStatic* solidoStatico = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
+	PxRigidStatic* solidoStatico = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
 	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	solidoStatico->attachShape(*shape);
 	gScene->addActor(*solidoStatico);
-	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });*/
+	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });
 
-	SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, CUBO, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);
-
+	SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, ESFERA, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);
 	/*PxRigidDynamic* solidoDinamico = gPhysics->createRigidDynamic(physx::PxTransform(0, 0, 0));
 	solidoDinamico->setLinearVelocity({ 0,0,0 });
 	solidoDinamico->setAngularVelocity({ 0,3,0 });

@@ -63,6 +63,8 @@ public:
 
         renderItem = new RenderItem(shape, rigidDynamic, Color);
         mScene->addActor(*rigidDynamic);
+        //mScene->setGravity(physx::PxVec3(0, 0, 0));
+        rigidDynamic->addForce({ 10000,0,0 }, physx::PxForceMode::eIMPULSE);
     }
 
     ~SolidoRigido() {
@@ -75,6 +77,18 @@ public:
 
     physx::PxRigidDynamic* getRigidDynamic() {
         return rigidDynamic;
+    }
+
+    float getMasa() {
+        return rigidDynamic->getMass();
+    }
+
+    Vector3 getPos() {
+        return rigidDynamic->getGlobalPose().p;
+    }
+
+    Vector3 getVel() {
+        return rigidDynamic->getLinearVelocity();
     }
 
 private:

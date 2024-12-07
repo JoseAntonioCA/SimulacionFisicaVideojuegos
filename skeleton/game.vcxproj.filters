@@ -24,6 +24,7 @@
     <ClCompile Include="GomuGomuFG.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="SolidoRigido.cpp" />
+    <ClCompile Include="SolidoRigidoSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="GomuGomuFG.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="SolidoRigido.h" />
+    <ClInclude Include="SolidoRigidoSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
