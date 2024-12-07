@@ -5,7 +5,7 @@
 class AnchoredSpringFG : public SpringForceGenerator
 {
 public:
-	AnchoredSpringFG(double K, double Resting, const Vector3& Anchor_pos) : SpringForceGenerator(Vector3(0,0,0), nullptr, K, Resting){
+	AnchoredSpringFG(double K, double Resting, const Vector3& Anchor_pos) : SpringForceGenerator(Vector3(0,0,0), nullptr, nullptr, K, Resting){
 		float masa = 15.0f;
 		float velReal = 10.0f;
 		float velSim = 5.0f;

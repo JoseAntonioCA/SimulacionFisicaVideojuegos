@@ -1,11 +1,5 @@
 #pragma once
-#include <vector>
-#include <PxPhysicsAPI.h>
-#include "core.hpp"
-#include <list>
-#include <random>
 #include "ForceGenerator.h"
-#include "Particle.h"
 
 
 class WindForceGenerator : public ForceGenerator
@@ -18,6 +12,11 @@ public:
 		Vector3 relativeVel = velocity - particle->getVel();
 		Vector3 force = k1* relativeVel + k2 * relativeVel.magnitude() * relativeVel;
 		particle->addForce(force);
+	}
+	virtual void applyForce(SolidoRigido* sd) override {
+		Vector3 relativeVel = velocity - sd->getVel();
+		Vector3 force = k1 * relativeVel + k2 * relativeVel.magnitude() * relativeVel;
+		sd->getRigidDynamic()->addForce(force);
 	}
 	void update(double deltaTime) {}
 	void update2(Vector3 v, float f) {}

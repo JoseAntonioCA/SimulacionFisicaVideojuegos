@@ -1,10 +1,12 @@
 #include "SolidoRigidoSystem.h"
 #include "core.hpp"
 #include <iostream>
-SolidoRigidoSystem::SolidoRigidoSystem(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, float Gravity, bool Simulado, bool NormalDistribution, SistemaSD type) :
-	origen(Origin), mPx(Px), mScene(Scene), gravity(Gravity), simulado(Simulado), normalDistribution(NormalDistribution), tipoSistema(type)
+SolidoRigidoSystem::SolidoRigidoSystem(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, physx::PxMaterial* MGMaterial, float Gravity, bool Simulado, bool NormalDistribution, SistemaSD type) :
+	origen(Origin), mPx(Px), mScene(Scene), mGMaterial (MGMaterial), gravity(Gravity), simulado(Simulado), normalDistribution(NormalDistribution), tipoSistema(type)
 {
+	mScene->setGravity({ 0, 0, 0 });
 
+	//mGMaterial->setRestitution(1.2);
 }
 SolidoRigidoSystem::~SolidoRigidoSystem()
 {
@@ -15,8 +17,11 @@ SolidoRigidoSystem::~SolidoRigidoSystem()
 
 void SolidoRigidoSystem::initSystem()
 {
-	ForceGenerator* fg = createNewForceGenerator(Gravedad);
+	ForceGenerator* fg = createNewForceGenerator(GravedadSD);
 	std::cout << "creada Gravedad" << std::endl;
+	ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
+	std::cout << "creado Viento" << std::endl;
+	SolidoRigido* proyectil = createNewSD(origen, { 5, 5, 5 }, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 5, {0.5,0.5,0.5,1}, false, false);
 	/*ForceGenerator* fg2 = createNewForceGenerator(Viento);
 	std::cout << "creado Viento" << std::endl;
 	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
@@ -30,10 +35,10 @@ void SolidoRigidoSystem::initSystem()
 void SolidoRigidoSystem::sdGenerator() {
 
 	switch (tipoSistema) {
-	case Fuente:
+	case FuenteSD:
 		generateSDFuente();
 		break;
-	case Lluvia:
+	case LluviaSD:
 		generateSDLluvia();
 		break;
 	default:
@@ -61,8 +66,8 @@ void SolidoRigidoSystem::generateSDFuente() {
 	float velSim = 5.0f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	SolidoRigido* proyectil = createNewSD(origen, { 0.25, 0.25, 0.25 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, {0.5,0.5,0.5,1}, false, false);
-	proyectil->getRigidDynamic()->addForce(initialVel);
+	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, {0.5,0.5,0.5,1}, false, false);
+	//proyectil->getRigidDynamic()->addForce(initialVel);
 }
 
 void SolidoRigidoSystem::generateSDLluvia() {
@@ -79,13 +84,14 @@ void SolidoRigidoSystem::generateSDLluvia() {
 		velY *= (_n(_mt));
 	}
 
-	float masa = 5.0f;
+	float masa = 50.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	SolidoRigido* proyectil = createNewSD(origen, { 0.25, 0.25, 0.25 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, { 0.5,0.5,0.5,1 }, false, false);
-	proyectil->getRigidDynamic()->addForce(initialVel);
+	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, { 0.5,0.5,0.5,1 }, false, false);
+	//proyectil->getRigidDynamic()->addForce(initialVel, physx::PxForceMode::eIMPULSE);
+	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa*30);
 }
 
 
@@ -100,7 +106,7 @@ void SolidoRigidoSystem::updateSystem(double dt)
 	// Generamos un número aleatorio
 	int random_number = dis(gen);
 	int rand = std::rand();
-	if (random_number <= 75) {
+	if (random_number <= 75 && solidosRigidos.size() <= 100) {
 		sdGenerator();
 	}
 
@@ -124,6 +130,7 @@ void SolidoRigidoSystem::updateSystem(double dt)
 			//else {
 			//	++it;  // Solo avanza al siguiente elemento si no eliminaste el actual
 			//}
+			it++;
 		}
 		else {
 			it = solidosRigidos.erase(it);  // Si el puntero es nulo, lo eliminamos también
@@ -179,20 +186,20 @@ ForceGenerator* SolidoRigidoSystem::createNewForceGenerator(GeneradorFuerzasSD t
 {
 	ForceGenerator* forceGen;
 	switch (type) {
-	case Gravedad:
+	case GravedadSD:
 
 		forceGen = new GravityForceGenerator(gravity, simulado);
 		break;
-	case Viento:
-		forceGen = new WindForceGenerator(Vector3(30, 0, 0), 2, 0);
+	case VientoSD:
+		forceGen = new WindForceGenerator(Vector3(-3000, 0, 0), 2, 0);
 		break;
-	case Torbellino:
+	case TorbellinoSD:
 		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
 		break;
-	case Explosion:
+	case ExplosionSD:
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
 		break;
-	case Muelle:
+	case MuelleSD:
 		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, nullptr, 10, 0);
 		break;
 	}

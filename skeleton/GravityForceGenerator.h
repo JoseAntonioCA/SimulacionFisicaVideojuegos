@@ -1,11 +1,5 @@
 #pragma once
-#include <vector>
-#include <PxPhysicsAPI.h>
-#include "core.hpp"
-#include <list>
-#include <random>
 #include "ForceGenerator.h"
-#include "Particle.h"
 
 
 class GravityForceGenerator : public ForceGenerator
@@ -21,6 +15,11 @@ public:
 		Vector3 force;
 		force = gravity * particle->getMasa();
 		particle->addForce(force);
+	}
+	virtual void applyForce(SolidoRigido* sd) override {
+		Vector3 force;
+		force = gravity * sd->getMasa();
+		sd->getRigidDynamic()->addForce(force);
 	}
 	void update(double deltaTime) {}
 	void update2(Vector3 v, float f) {}

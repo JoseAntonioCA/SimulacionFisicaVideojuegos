@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <PxPhysicsAPI.h>
 #include "core.hpp"
@@ -18,14 +19,14 @@
 
 using namespace std;
 
-enum SistemaSD { Fuente, Lluvia};
-enum GeneradorFuerzasSD { Gravedad, Viento, Torbellino, Explosion, Muelle };
+enum SistemaSD { FuenteSD, LluviaSD};
+enum GeneradorFuerzasSD { GravedadSD, VientoSD, TorbellinoSD, ExplosionSD, MuelleSD };
 
 class SolidoRigidoSystem
 {
 public:
 	SolidoRigidoSystem() {};
-	SolidoRigidoSystem(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, float Gravity, bool Simulado, bool NormalDistribution, SistemaSD type);
+	SolidoRigidoSystem(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, physx::PxMaterial* MGMaterial, float Gravity, bool Simulado, bool NormalDistribution, SistemaSD type);
 	~SolidoRigidoSystem();
 
 	void initSystem();
@@ -54,6 +55,7 @@ public:
 private:
 	physx::PxPhysics* mPx;
 	physx::PxScene* mScene;
+	physx::PxMaterial* mGMaterial;
 
 	vector<SolidoRigido*> solidosRigidos;
 	vector<ForceGenerator*> forceGenerators;

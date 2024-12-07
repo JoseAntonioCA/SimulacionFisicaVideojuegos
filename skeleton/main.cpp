@@ -8,6 +8,7 @@
 #include "Particle.h"
 #include "SolidoRigido.h"
 #include "PhysicsScene.h"
+#include "SolidoRigidoSystem.h"
 
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -38,6 +39,7 @@ PxTransform* x, *y, *z, *origin;
 PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 Particle* particula;
 PhysicsScene* escena1;
+SolidoRigidoSystem* sdSys;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -69,7 +71,14 @@ void initPhysics(bool interactive)
 	gScene->addActor(*solidoStatico);
 	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });
 
-	SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, ESFERA, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);
+	PxRigidStatic* solidoStatico2 = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
+	PxShape* shape2 = CreateShape(PxBoxGeometry(0.1, 100, 100));
+	solidoStatico2->attachShape(*shape2);
+	gScene->addActor(*solidoStatico2);
+	RenderItem* item2 = new RenderItem(shape2, solidoStatico2, { 0.1,0.1,0.1,1 });
+
+	/*SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, ESFERA, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);*/
+
 	/*PxRigidDynamic* solidoDinamico = gPhysics->createRigidDynamic(physx::PxTransform(0, 0, 0));
 	solidoDinamico->setLinearVelocity({ 0,0,0 });
 	solidoDinamico->setAngularVelocity({ 0,3,0 });
@@ -79,7 +88,8 @@ void initPhysics(bool interactive)
 	PxRigidBodyExt::updateMassAndInertia(*solidoDinamico, 0.15);
 	gScene->addActor(*solidoDinamico);
 	RenderItem* item2 = new RenderItem(shape2, solidoDinamico, { 0.1,0.1,0.1,1 });*/
-
+	sdSys = new SolidoRigidoSystem({ 0,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, LluviaSD);
+	sdSys->initSystem();
 	escena1 = new PhysicsScene(false, 9.8f);
 	escena1->initScene();
 	}
@@ -92,6 +102,7 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 	escena1->updateScene(t);
+	sdSys->updateSystem(t);
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -118,6 +129,7 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	delete escena1;
+	delete sdSys;
 	}
 
 // Function called when a key is pressed

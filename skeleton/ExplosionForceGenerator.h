@@ -1,11 +1,5 @@
 #pragma once
-#include <vector>
-#include <PxPhysicsAPI.h>
-#include "core.hpp"
-#include <list>
-#include <random>
 #include "ForceGenerator.h"
-#include "Particle.h"
 
 class ExplosionForceGenerator : public ForceGenerator
 {
@@ -24,6 +18,19 @@ public:
         }
 
         particle->addForce(force);
+    }
+
+    virtual void applyForce(SolidoRigido* sd) override {
+
+        Vector3 direction = sd->getPos() - center;
+        float r = direction.magnitude();
+
+        Vector3 force = Vector3(0, 0, 0);
+        if (r < radius) {
+            force = (K / pow(r, 2)) * direction * exp(-(timeElapsed / T));
+        }
+
+        sd->getRigidDynamic()->addForce(force);
     }
 
     void update(double deltaTime) {

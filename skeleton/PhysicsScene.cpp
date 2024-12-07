@@ -204,7 +204,7 @@ ForceGenerator* PhysicsScene::createNewForceGenerator(GeneradorFuerzas type)
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
 		break;
 	case Muelle:
-		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, 100, 0);
+		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, nullptr, 100, 0);
 		break;
 	}
 	addCreatedForceGenerator(forceGen);

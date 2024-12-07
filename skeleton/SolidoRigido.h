@@ -7,7 +7,7 @@
 #include "callbacks.hpp"
 #include <ctype.h>
 #include <vector>
-#include "PhysicsScene.h"
+#include <list>
 
 enum FormaSolidoDinamico { CUBO, ESFERA, PLANO, CAPSULA };
 
@@ -49,7 +49,7 @@ public:
         rigidDynamic->setMass(masa);
 
         // Dejar que PhysX calcule automáticamente la inercia
-        PxRigidBodyExt::updateMassAndInertia(*rigidDynamic, masa);
+        physx::PxRigidBodyExt::updateMassAndInertia(*rigidDynamic, masa);
 
         // Comparar los valores calculados por PhysX con los manuales
         compararInercias();
@@ -64,7 +64,7 @@ public:
         renderItem = new RenderItem(shape, rigidDynamic, Color);
         mScene->addActor(*rigidDynamic);
         //mScene->setGravity(physx::PxVec3(0, 0, 0));
-        rigidDynamic->addForce({ 10000,0,0 }, physx::PxForceMode::eIMPULSE);
+        //rigidDynamic->addForce({ 10000,0,0 }, physx::PxForceMode::eIMPULSE);
     }
 
     ~SolidoRigido() {
@@ -110,7 +110,7 @@ private:
         float Iz = (1.0f / 12.0f) * masa * (dimensiones.x * dimensiones.x + dimensiones.y * dimensiones.y);
 
         // Asignar los momentos de inercia manualmente
-        momentosInerciaManual = PxVec3(Ix, Iy, Iz);
+        momentosInerciaManual = physx::PxVec3(Ix, Iy, Iz);
 
         // Imprimir los momentos de inercia calculados manualmente
         std::cout << "Momentos de inercia del cubo (manuales): Ix = " << Ix << ", Iy = " << Iy << ", Iz = " << Iz << "\n";
@@ -119,7 +119,7 @@ private:
     void calcularMomentosDeInerciaEsfera(float radio) {
         // Fórmula de momento de inercia para una esfera homogénea
         float I = (2.0f / 5.0f) * masa * radio * radio;
-        momentosInerciaManual = PxVec3(I, I, I); // La esfera tiene el mismo momento en todos los ejes
+        momentosInerciaManual = physx::PxVec3(I, I, I); // La esfera tiene el mismo momento en todos los ejes
 
         // Imprimir el momento de inercia calculado manualmente
         std::cout << "Momentos de inercia de la esfera (manuales): I = " << I << "\n";
@@ -127,7 +127,7 @@ private:
 
     void compararInercias() {
         // Obtener los momentos de inercia calculados automáticamente por PhysX
-        PxVec3 momentosInerciaPhysX = rigidDynamic->getMassSpaceInertiaTensor();
+        physx::PxVec3 momentosInerciaPhysX = rigidDynamic->getMassSpaceInertiaTensor();
 
         // Comparar los resultados
         std::cout << "Momentos de inercia calculados por PhysX:\n";
