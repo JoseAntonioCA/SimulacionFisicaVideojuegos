@@ -4,6 +4,7 @@
 #include "core.hpp"
 #include "ForceGenerator.h"
 #include "Particle.h"
+
 class ForceRegistry
 {
 public:

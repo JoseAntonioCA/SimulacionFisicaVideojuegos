@@ -259,6 +259,7 @@
     <ClCompile Include="ExplosionForceGenerator.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
     <ClCompile Include="ForceRegistry.cpp" />
+    <ClCompile Include="ForceRegistrySD.cpp" />
     <ClCompile Include="GomuGomuFG.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
     <ClCompile Include="main.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="ExplosionForceGenerator.h" />
     <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="ForceRegistry.h" />
+    <ClInclude Include="ForceRegistrySD.h" />
     <ClInclude Include="GomuGomuFG.h" />
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="Particle.h" />

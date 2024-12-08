@@ -48,13 +48,13 @@ void PhysicsScene::initScene()
 	float gravity = 9.8f;
 	Vector3 surfacePosition(0, 30, 0);  // Nivel de la superficie del agua
 
-	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(height, volume, liquid_density, gravity, surfacePosition);
-	addCreatedForceGenerator(bfg);
+	/*BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(height, volume, liquid_density, gravity, surfacePosition);
+	addCreatedForceGenerator(bfg);*/
 
 	//BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(10, 1, 1000);
 	//addCreatedForceGenerator(bfg);
-	/*forceRegistries.addRegistry(proyectil2, gfg);
-	forceRegistries.addRegistry(proyectil3, gfg);*/
+	forceRegistries.addRegistry(proyectil2, gfg);
+	//forceRegistries.addRegistry(proyectil3, gfg);
 
 	/*SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, 50, 10);
 	addCreatedForceGenerator(sfg);
@@ -88,17 +88,17 @@ void PhysicsScene::updateScene(double dt)
 	for (auto it : particlesSystems) {
 		it->updateSystem(dt);
 	}
+	forceRegistries.updateForces(dt);
 	for (auto it = sceneParticles.begin(); it != sceneParticles.end(); ) {
 		Particle* particle = *it;
 		if (particle != nullptr) {  // Verifica que la partícula no sea nula
 
-			//forceRegistries.updateForces(dt);
-			for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
-				ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
-				fG->applyForce(particle);
-				fG->update(dt);
-				it2++;
-			}
+			//for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+			//	ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+			//	fG->applyForce(particle);
+			//	fG->update(dt);
+			//	it2++;
+			//}
 
 			particle->integrate(dt);  // Actualiza la partícula
 			if (/*particle->getPos().y <= 0.0f || */ particle->toErase()) {

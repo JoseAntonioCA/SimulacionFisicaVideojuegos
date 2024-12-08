@@ -19,17 +19,45 @@ void SolidoRigidoSystem::initSystem()
 {
 	ForceGenerator* fg = createNewForceGenerator(GravedadSD);
 	std::cout << "creada Gravedad" << std::endl;
-	ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
-	std::cout << "creado Viento" << std::endl;
-	SolidoRigido* proyectil = createNewSD(origen, { 5, 5, 5 }, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 5, {0.5,0.5,0.5,1}, false, false);
+	/*ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
+	std::cout << "creado Viento" << std::endl;*/
+	SolidoRigido* proyectil = createNewSD(origen, { 5, 5, 5 }, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 100, {0.5,0.5,0.5,1}, false, false);
+	SolidoRigido* proyectil2 = createNewSD(origen, { 5, 15, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, { 0.5,0.5,0.5,1 }, false, false);
+	SolidoRigido* proyectil3 = createNewSD(origen, { 5, 25, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, { 0.5,0.5,0.5,1 }, false, false);
+	for (auto e : forceGenerators) {
+		forceRegistriesSD.addRegistry(proyectil, e);
+	}
 	/*ForceGenerator* fg2 = createNewForceGenerator(Viento);
 	std::cout << "creado Viento" << std::endl;
 	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
 	std::cout << "creado Torbellino" << std::endl;*/
-	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
-	std::cout << "creada Explosion" << std::endl;*/
 	/*ForceGenerator* fg5 = createNewForceGenerator(Muelle);
 	std::cout << "creado Muelle" << std::endl;*/
+
+
+	SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
+	addCreatedForceGenerator(sfg);
+	SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil, 50, 10);
+	addCreatedForceGenerator(sfg2);
+	SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
+	addCreatedForceGenerator(sfg3);
+	SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil3, 50, 10);
+	addCreatedForceGenerator(sfg4);
+
+
+	/*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
+	addCreatedForceGenerator(sfg);
+	GomuGomuFG* sfg2 = new GomuGomuFG(Vector3(0, 0, 0), proyectil, 50, 10);
+	addCreatedForceGenerator(sfg2);
+	GomuGomuFG* sfg3 = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
+	addCreatedForceGenerator(sfg3);
+	GomuGomuFG* sfg4 = new GomuGomuFG(Vector3(0, 0, 0), proyectil3, 50, 10);
+	addCreatedForceGenerator(sfg4);*/
+
+	forceRegistriesSD.addRegistry(proyectil, sfg);
+	forceRegistriesSD.addRegistry(proyectil2, sfg2);
+	forceRegistriesSD.addRegistry(proyectil3, sfg3);
+	forceRegistriesSD.addRegistry(proyectil2, sfg4);
 }
 
 void SolidoRigidoSystem::sdGenerator() {
@@ -84,14 +112,19 @@ void SolidoRigidoSystem::generateSDLluvia() {
 		velY *= (_n(_mt));
 	}
 
-	float masa = 50.0f;
+	float masa = 5.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
 	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, { 0.5,0.5,0.5,1 }, false, false);
 	//proyectil->getRigidDynamic()->addForce(initialVel, physx::PxForceMode::eIMPULSE);
-	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa*30);
+	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
+
+	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
+	/*for (auto e : forceGenerators) {
+		forceRegistriesSD.addRegistry(proyectil, e);
+	}*/
 }
 
 
@@ -110,17 +143,19 @@ void SolidoRigidoSystem::updateSystem(double dt)
 		sdGenerator();
 	}
 
+	forceRegistriesSD.updateForces(dt);
 	for (auto it = solidosRigidos.begin(); it != solidosRigidos.end(); ) {
 		SolidoRigido* sd = *it;  // Obtener el puntero de la partícula
 
 		if (sd != nullptr) {  // Verifica que la partícula no sea nula
 
-			for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
-				ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
-				fG->applyForce(sd);
-				fG->update(dt);
-				it2++;
-			}
+
+			//for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
+			//	ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
+			//	fG->applyForce(sd);
+			//	fG->update(dt);
+			//	it2++;
+			//}
 
 			//particle->integrate(dt);  // Actualiza la partícula
 			//if (particle->getPos().y <= 0.0f || particle->toErase()) {
@@ -140,37 +175,18 @@ void SolidoRigidoSystem::updateSystem(double dt)
 
 void SolidoRigidoSystem::pressKey(char key, const PxTransform& camera)
 {
-	//PX_UNUSED(camera);
-	//switch (toupper(key))
-	//{
-	//case '1':
-	//{
-	//	//Bala pistola
-	//	PxVec3 cameraDirection = camera.q.getBasisVector2();
-
-	//	Vector3 initialVel(cameraDirection.x * -3,
-	//		cameraDirection.y * -3,
-	//		cameraDirection.z * -3);
-	//	Vector3 initialAcel(0, 1.0001, 0);
-
-	//	Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 100, 5);
-	//	break;
-	//}
-	//case '2':
-	//{
-	//	//Bala canyon
-	//	PxVec3 cameraDirection = camera.q.getBasisVector2();
-
-	//	Vector3 initialVel(cameraDirection.x * -3,
-	//		cameraDirection.y * -3,
-	//		cameraDirection.z * -3);
-	//	Vector3 initialAcel(0, 1.0001, 0);
-	//	Particle* proyectil = createNewParticle(Esfera, camera.p, initialVel, initialAcel, true, false, false, 0.5f, 5, 9.8f, 0.98, 2, 10, 5);
-	//	break;
-	//}
-	//default:
-	//	break;
-	//}
+	PX_UNUSED(camera);
+	switch (toupper(key))
+	{
+	case 'E':
+	{
+		ForceGenerator* fg4 = createNewForceGenerator(ExplosionSD);
+		std::cout << "creada Explosion" << std::endl;
+		break;
+	}
+	default:
+		break;
+	}
 
 }
 
@@ -197,7 +213,7 @@ ForceGenerator* SolidoRigidoSystem::createNewForceGenerator(GeneradorFuerzasSD t
 		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
 		break;
 	case ExplosionSD:
-		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);
+		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 100000000, 2000, 0.01f);
 		break;
 	case MuelleSD:
 		forceGen = new SpringForceGenerator(Vector3(0, 50, 0), nullptr, nullptr, 10, 0);

@@ -14,7 +14,7 @@
 #include "SpringForceGenerator.h"
 
 
-#include "ForceRegistry.h"
+#include "ForceRegistrySD.h"
 #include <random>
 
 using namespace std;
@@ -60,7 +60,7 @@ private:
 	vector<SolidoRigido*> solidosRigidos;
 	vector<ForceGenerator*> forceGenerators;
 	ForceGenerator* forceGenerator;
-	ForceRegistry forceRegistries;
+	ForceRegistrySD forceRegistriesSD;
 
 	bool normalDistribution;
 

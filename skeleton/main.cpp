@@ -71,7 +71,7 @@ void initPhysics(bool interactive)
 	gScene->addActor(*solidoStatico);
 	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });
 
-	PxRigidStatic* solidoStatico2 = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
+	PxRigidStatic* solidoStatico2 = gPhysics->createRigidStatic(physx::PxTransform(-100, -20, 0));
 	PxShape* shape2 = CreateShape(PxBoxGeometry(0.1, 100, 100));
 	solidoStatico2->attachShape(*shape2);
 	gScene->addActor(*solidoStatico2);
@@ -138,6 +138,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	PX_UNUSED(camera);
 	
 	escena1->pressKey(key, camera);
+	sdSys->pressKey(key, camera);
 
 	switch(toupper(key))
 	{

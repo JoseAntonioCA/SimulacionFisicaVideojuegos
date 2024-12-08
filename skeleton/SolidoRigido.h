@@ -46,10 +46,12 @@ public:
         }
 
         rigidDynamic->attachShape(*shape);
+        std::cout << "Masa antes de setMass: " << rigidDynamic->getMass() << "\n";
         rigidDynamic->setMass(masa);
+        std::cout << "Masa después de setMass: " << rigidDynamic->getMass() << "\n";
 
         // Dejar que PhysX calcule automáticamente la inercia
-        physx::PxRigidBodyExt::updateMassAndInertia(*rigidDynamic, masa);
+        //physx::PxRigidBodyExt::updateMassAndInertia(*rigidDynamic, masa);
 
         // Comparar los valores calculados por PhysX con los manuales
         compararInercias();
@@ -63,6 +65,7 @@ public:
 
         renderItem = new RenderItem(shape, rigidDynamic, Color);
         mScene->addActor(*rigidDynamic);
+        std::cout << "Masa después de setMass: " << rigidDynamic->getMass() << "\n";
         //mScene->setGravity(physx::PxVec3(0, 0, 0));
         //rigidDynamic->addForce({ 10000,0,0 }, physx::PxForceMode::eIMPULSE);
     }
@@ -81,6 +84,7 @@ public:
 
     float getMasa() {
         return rigidDynamic->getMass();
+        //return masa;
     }
 
     Vector3 getPos() {

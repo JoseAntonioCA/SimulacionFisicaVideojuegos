@@ -19,7 +19,7 @@ public:
 	virtual void applyForce(SolidoRigido* sd) override {
 		Vector3 force;
 		force = gravity * sd->getMasa();
-		sd->getRigidDynamic()->addForce(force);
+		sd->getRigidDynamic()->addForce(force, physx::PxForceMode::eFORCE);
 	}
 	void update(double deltaTime) {}
 	void update2(Vector3 v, float f) {}
