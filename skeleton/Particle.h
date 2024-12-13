@@ -109,7 +109,7 @@ public:
 			toerase = true;
 		}
 		if (constantAcel) {
-			vel = (vel /** powf(damping, time)*/ + (time * acel))/** powf(damping, time)*/;
+			vel = (vel * powf(damping, time) + (time * acel))/** powf(damping, time)*/;
 			//actualizar acel de la particula de forma constante
 			pose.p = pose.p + (vel * time);
 		}

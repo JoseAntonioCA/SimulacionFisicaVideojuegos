@@ -182,6 +182,9 @@ void SolidoRigidoSystem::pressKey(char key, const PxTransform& camera)
 	{
 		ForceGenerator* fg4 = createNewForceGenerator(ExplosionSD);
 		std::cout << "creada Explosion" << std::endl;
+
+		for (auto e: solidosRigidos)
+			forceRegistriesSD.addRegistry(e, fg4);
 		break;
 	}
 	default:

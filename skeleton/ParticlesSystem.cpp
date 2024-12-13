@@ -18,8 +18,10 @@ void ParticlesSystem::initSystem()
 	ForceGenerator* fg = createNewForceGenerator(Gravedad);
 	std::cout << "creada Gravedad" << std::endl;
 	/*ForceGenerator* fg2 = createNewForceGenerator(Viento);
-	std::cout << "creado Viento" << std::endl;
-	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
+	std::cout << "creado Viento" << std::endl;*/
+	ForceGenerator* fg4 = createNewForceGenerator(Explosion);
+	std::cout << "creada Explosion" << std::endl;
+	/*ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
 	std::cout << "creado Torbellino" << std::endl;*/
 	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
 	std::cout << "creada Explosion" << std::endl;*/

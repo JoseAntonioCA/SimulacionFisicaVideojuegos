@@ -88,6 +88,8 @@ void initPhysics(bool interactive)
 	PxRigidBodyExt::updateMassAndInertia(*solidoDinamico, 0.15);
 	gScene->addActor(*solidoDinamico);
 	RenderItem* item2 = new RenderItem(shape2, solidoDinamico, { 0.1,0.1,0.1,1 });*/
+
+
 	sdSys = new SolidoRigidoSystem({ 0,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, LluviaSD);
 	sdSys->initSystem();
 	escena1 = new PhysicsScene(false, 9.8f);

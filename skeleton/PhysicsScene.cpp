@@ -24,20 +24,20 @@ void PhysicsScene::initScene()
 	Vector3 initialAcel(0, gravity, 0);
 
 	////Para la niebla, modificar aqui la gravedad a una mucho menor hasta que no se aplique rozamiento con el aire
-	//ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f /* * 0.000000001f*/, 0.0f, false, true, Lluvia);
-	//systema->initSystem();
+	/*ParticlesSystem* systema = createNewParticlesSystem(initialPosition, 9.8f  * 0.000000001f, 0.0f, false, true, Niebla);
+	systema->initSystem();*/
 
-	/*Particle* proyectil = createNewParticle(Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
-	std::cout << "particula generada";*/
+	Particle* proyectil = createNewParticle(Esfera, Vector3(0,50,0), Vector3(0, 0, 0), Vector3(0, 0, 0), true, false, false, 0.5f, 5, 0, 0.98, 100, 10, 5);
+	std::cout << "particula generada";
 
 	float masa = 800.0f;
 	float velReal = 10.0f;
 	float velSim = 5.0f;
-	Particle* proyectil2 = createNewParticle(Esfera, initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.98, 100, velReal, velSim);
+	Particle* proyectil2 = createNewParticle(Esfera, initialPosition, initialVel, initialAcel, true, true, simulado, 1, masa, gravity, 0.8, 100, velReal, velSim);
 	std::cout << "particula 'proyectil2' generada";
 
-	///*Particle* proyectil3 = createNewParticle(Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
-	//std::cout << "particula generada";*/
+	Particle* proyectil3 = createNewParticle(Esfera, Vector3(0, 20, 0), initialVel, initialAcel, true, true, simulado, 1.5f, masa * 2, gravity, 0.98, 100, velReal, velSim);
+	std::cout << "particula generada";
 
 	GravityForceGenerator *gfg = new GravityForceGenerator(gravity, simulado);
 	addCreatedForceGenerator(gfg);
@@ -48,22 +48,23 @@ void PhysicsScene::initScene()
 	float gravity = 9.8f;
 	Vector3 surfacePosition(0, 30, 0);  // Nivel de la superficie del agua
 
-	/*BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(height, volume, liquid_density, gravity, surfacePosition);
-	addCreatedForceGenerator(bfg);*/
+	BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(height, volume, liquid_density, gravity, surfacePosition);
+	addCreatedForceGenerator(bfg);
+	forceRegistries.addRegistry(proyectil2, bfg);
 
-	//BuoyancyForceGenerator* bfg = new BuoyancyForceGenerator(10, 1, 1000);
-	//addCreatedForceGenerator(bfg);
 	forceRegistries.addRegistry(proyectil2, gfg);
+		/*
 	//forceRegistries.addRegistry(proyectil3, gfg);
-
-	/*SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg);
-	SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, 50, 10);
-	addCreatedForceGenerator(sfg2);
-	SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg3);
-	SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil3, 50, 10);
-	addCreatedForceGenerator(sfg4);*/
+	//forceRegistries.addRegistry(proyectil2, gfg);
+	//	forceRegistries.addRegistry(proyectil3, gfg);
+	//SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, nullptr, 50, 10);
+	//addCreatedForceGenerator(sfg);
+	//SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil, nullptr, 50, 10);
+	//addCreatedForceGenerator(sfg2);
+	//SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil2, nullptr, 50, 10);
+	//addCreatedForceGenerator(sfg3);
+	//SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), proyectil3, nullptr, 50, 10);
+	//addCreatedForceGenerator(sfg4);
 
 
 	/*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
@@ -75,10 +76,10 @@ void PhysicsScene::initScene()
 	GomuGomuFG* sfg4 = new GomuGomuFG(Vector3(0, 0, 0), proyectil3, 50, 10);
 	addCreatedForceGenerator(sfg4);*/
 
-	/*forceRegistries.addRegistry(proyectil, sfg);
-	forceRegistries.addRegistry(proyectil2, sfg2);
-	forceRegistries.addRegistry(proyectil3, sfg3);
-	forceRegistries.addRegistry(proyectil2, sfg4);*/
+	//forceRegistries.addRegistry(proyectil, sfg);
+	//forceRegistries.addRegistry(proyectil2, sfg2);
+	//forceRegistries.addRegistry(proyectil3, sfg3);
+	//forceRegistries.addRegistry(proyectil2, sfg4);
 	
 	
 }
