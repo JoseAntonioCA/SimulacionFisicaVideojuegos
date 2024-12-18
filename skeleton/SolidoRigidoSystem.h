@@ -5,6 +5,7 @@
 #include "core.hpp"
 #include <list>
 #include "SolidoRigido.h"
+#include "Player.h"
 
 #include "ForceGenerator.h"
 #include "GravityForceGenerator.h"
@@ -50,6 +51,9 @@ public:
 	SolidoRigido* createNewSD(Vector3 Pos, Vector3 Geo, Vector3 LinVel, Vector3 AngVel, FormaSolidoDinamico Type,
 		physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, Vector4 Color, bool ManualConfigLinVel, bool ManualConfigAngVel);
 
+	Player* createNewPlayer(Vector3 Pos, Vector3 Geo, Vector3 LinVel, Vector3 AngVel, FormaSolidoDinamico Type,
+		physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, Vector4 Color, bool ManualConfigLinVel, bool ManualConfigAngVel);
+
 
 	ForceGenerator* createNewForceGenerator(GeneradorFuerzasSD type);
 private:
@@ -57,10 +61,18 @@ private:
 	physx::PxScene* mScene;
 	physx::PxMaterial* mGMaterial;
 
+	vector<SpringForceGenerator*> muelles;
+
+	Player* player;
+	vector<PxRigidStatic*> puntosAnclaje;
+	
+
 	vector<SolidoRigido*> solidosRigidos;
 	vector<ForceGenerator*> forceGenerators;
 	ForceGenerator* forceGenerator;
+
 	ForceRegistrySD forceRegistriesSD;
+	ForceRegistrySD forceRegistriesSDMuelles;
 
 	bool normalDistribution;
 

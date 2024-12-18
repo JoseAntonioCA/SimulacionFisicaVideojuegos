@@ -31,7 +31,7 @@ public:
 			relative_pos_vector = otherSD->getPos() - sd->getPos();
 		}
 		else
-			relative_pos_vector = sd->getPos() - origen;
+			relative_pos_vector = origen - sd->getPos();
 
 
 		Vector3 force;

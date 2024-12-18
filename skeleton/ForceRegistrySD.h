@@ -13,6 +13,10 @@ public:
 		registries.push_back({ sd, fg });
 	}
 
+	void clearRegistries() {
+		registries.clear();
+	}
+
 	void updateForces(double dt) {
 		for (ForceRegistrationSD& r : registries) {
 			r.fg->applyForce(r.sd);

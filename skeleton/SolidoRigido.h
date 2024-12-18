@@ -95,7 +95,7 @@ public:
         return rigidDynamic->getLinearVelocity();
     }
 
-private:
+protected:
     physx::PxScene* mScene; // Puntero de la escena a la que está atachado el objeto
     float masa;
     RenderItem* renderItem; // Render item para el renderizado del objeto
