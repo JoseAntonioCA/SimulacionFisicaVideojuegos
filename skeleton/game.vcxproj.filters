@@ -12,21 +12,50 @@
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
-    <ClCompile Include="ParticlesSystem.cpp" />
-    <ClCompile Include="ForceGenerator.cpp" />
-    <ClCompile Include="GravityForceGenerator.cpp" />
-    <ClCompile Include="WindForceGenerator.cpp" />
-    <ClCompile Include="WhirlwindForceGenerator.cpp" />
-    <ClCompile Include="ExplosionForceGenerator.cpp" />
-    <ClCompile Include="SpringForceGenerator.cpp" />
-    <ClCompile Include="AnchoredSpringFG.cpp" />
-    <ClCompile Include="ForceRegistry.cpp" />
-    <ClCompile Include="GomuGomuFG.cpp" />
-    <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="SolidoRigido.cpp" />
-    <ClCompile Include="SolidoRigidoSystem.cpp" />
-    <ClCompile Include="ForceRegistrySD.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Nivel1Juego.cpp">
+      <Filter>Niveles</Filter>
+    </ClCompile>
+    <ClCompile Include="AnchoredSpringFG.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="BuoyancyForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="GomuGomuFG.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceRegistry.cpp">
+      <Filter>Sistemas</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceRegistrySD.cpp">
+      <Filter>Sistemas</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlesSystem.cpp">
+      <Filter>Sistemas\Particulas</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidoRigidoSystem.cpp">
+      <Filter>Sistemas\SolidosRigidos</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="WhirlwindForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="WindForceGenerator.cpp">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -40,25 +69,69 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PhysicsScene.h" />
-    <ClInclude Include="ParticlesSystem.h" />
-    <ClInclude Include="ForceGenerator.h" />
-    <ClInclude Include="GravityForceGenerator.h" />
-    <ClInclude Include="WindForceGenerator.h" />
-    <ClInclude Include="WhirlwindForceGenerator.h" />
-    <ClInclude Include="ExplosionForceGenerator.h" />
-    <ClInclude Include="SpringForceGenerator.h" />
-    <ClInclude Include="AnchoredSpringFG.h" />
-    <ClInclude Include="ForceRegistry.h" />
-    <ClInclude Include="GomuGomuFG.h" />
-    <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="SolidoRigido.h" />
-    <ClInclude Include="SolidoRigidoSystem.h" />
-    <ClInclude Include="ForceRegistrySD.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Nivel1Juego.h">
+      <Filter>Niveles</Filter>
+    </ClInclude>
+    <ClInclude Include="AnchoredSpringFG.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="BuoyancyForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceRegistrySD.h">
+      <Filter>Sistemas</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceRegistry.h">
+      <Filter>Sistemas</Filter>
+    </ClInclude>
+    <ClInclude Include="GomuGomuFG.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticlesSystem.h">
+      <Filter>Sistemas\Particulas</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidoRigidoSystem.h">
+      <Filter>Sistemas\SolidosRigidos</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="WhirlwindForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="WindForceGenerator.h">
+      <Filter>Sistemas\Fuerzas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Niveles">
+      <UniqueIdentifier>{4055fe5f-6085-49d8-8fa3-428ecfcdfbb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sistemas">
+      <UniqueIdentifier>{5c3e532f-a575-44d1-be84-34a91727a08b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sistemas\Fuerzas">
+      <UniqueIdentifier>{f31f4a26-676b-41ac-91a0-7dd8f6b503c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sistemas\Particulas">
+      <UniqueIdentifier>{891fa28e-9942-4e20-af59-aa9f67b0b5d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sistemas\SolidosRigidos">
+      <UniqueIdentifier>{f14e6193-db4b-4a09-8dc0-d5523a2ba0e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

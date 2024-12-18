@@ -18,76 +18,44 @@ SolidoRigidoSystem::~SolidoRigidoSystem()
 void SolidoRigidoSystem::initSystem()
 {
 
-	PxRigidStatic* puntoAncla = mPx->createRigidStatic(physx::PxTransform(-90, 50, 0));
-	PxShape* shape = CreateShape(PxSphereGeometry(5));
-	puntoAncla->attachShape(*shape);
-	mScene->addActor(*puntoAncla);
-	RenderItem* itemR = new RenderItem(shape, puntoAncla, { 0.1,0.1,0.1,1 });
-	puntosAnclaje.push_back(puntoAncla);
+	//Gravedad
 
-	PxRigidStatic* puntoAncla2 = mPx->createRigidStatic(physx::PxTransform(90, 50, 0));
-	puntoAncla2->attachShape(*shape);
-	mScene->addActor(*puntoAncla2);
-	RenderItem* itemR2 = new RenderItem(shape, puntoAncla2, { 0.1,0.1,0.1,1 });
-	puntosAnclaje.push_back(puntoAncla2);
-
-	ForceGenerator* fg = createNewForceGenerator(GravedadSD);
+	gravedadG = new GravityForceGenerator(gravity, simulado);
+	forceGenerators.push_back(gravedadG);
 	std::cout << "creada Gravedad" << std::endl;
 
-	//Generadores de viento en las 4 direcciones
-
-	ForceGenerator* forceGenV1 = new WindForceGenerator(Vector3(-3000, 0, 0), 2, 0); // Izq
-	addCreatedForceGenerator(forceGenV1);
-	ForceGenerator* forceGenV2 = new WindForceGenerator(Vector3(3000, 0, 0), 2, 0); // Der
-	addCreatedForceGenerator(forceGenV2);
-	ForceGenerator* forceGenV3 = new WindForceGenerator(Vector3(0, 0, 3000), 2, 0); // Atras
-	addCreatedForceGenerator(forceGenV3);
-	ForceGenerator* forceGenV4 = new WindForceGenerator(Vector3(0, 0, -3000), 2, 0); // Adelante
-	addCreatedForceGenerator(forceGenV4);
+	//SolidoRigido* proyectil = createNewSD(origen, { 5, 5, 5 }, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 100, 60, {0.5,0.5,0.5,1}, false, false, false);
+	//SolidoRigido* proyectil2 = createNewSD(origen, { 5, 15, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, 60, { 0.5,0.5,0.5,1 }, false, false, false);
+	//SolidoRigido* proyectil3 = createNewSD(origen, { 5, 25, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, 60, { 0.5,0.5,0.5,1 }, false, false, false);
+	//for (auto e : forceGenerators) {
+	//	forceRegistriesSD.addRegistry(proyectil, e);
+	//	//forceRegistriesSD.addRegistry(player, e);
+	//}
 
 
-
-	/*ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
-	std::cout << "creado Viento" << std::endl;*/
-	player = createNewPlayer({0,100,0}, {5, 5, 5}, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 300, {0.8,0.8,0.8,1}, false, false);
-	SolidoRigido* proyectil = createNewSD(origen, { 5, 5, 5 }, {0,0,0}, {0,0,0}, ESFERA, mPx, mScene, 100, {0.5,0.5,0.5,1}, false, false);
-	SolidoRigido* proyectil2 = createNewSD(origen, { 5, 15, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, { 0.5,0.5,0.5,1 }, false, false);
-	SolidoRigido* proyectil3 = createNewSD(origen, { 5, 25, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 100, { 0.5,0.5,0.5,1 }, false, false);
-	for (auto e : forceGenerators) {
-		forceRegistriesSD.addRegistry(proyectil, e);
-		forceRegistriesSD.addRegistry(player, e);
-	}
-	/*ForceGenerator* fg2 = createNewForceGenerator(Viento);
-	std::cout << "creado Viento" << std::endl;
-	ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
-	std::cout << "creado Torbellino" << std::endl;*/
-	/*ForceGenerator* fg5 = createNewForceGenerator(Muelle);
-	std::cout << "creado Muelle" << std::endl;*/
+	//SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
+	//addCreatedForceGenerator(sfg);
+	//SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil, 50, 10);
+	//addCreatedForceGenerator(sfg2);
+	//SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
+	//addCreatedForceGenerator(sfg3);
+	//SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil3, 50, 10);
+	//addCreatedForceGenerator(sfg4);
 
 
-	SpringForceGenerator* sfg = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg);
-	SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil, 50, 10);
-	addCreatedForceGenerator(sfg2);
-	SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg3);
-	SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil3, 50, 10);
-	addCreatedForceGenerator(sfg4);
+	///*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
+	//addCreatedForceGenerator(sfg);
+	//GomuGomuFG* sfg2 = new GomuGomuFG(Vector3(0, 0, 0), proyectil, 50, 10);
+	//addCreatedForceGenerator(sfg2);
+	//GomuGomuFG* sfg3 = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
+	//addCreatedForceGenerator(sfg3);
+	//GomuGomuFG* sfg4 = new GomuGomuFG(Vector3(0, 0, 0), proyectil3, 50, 10);
+	//addCreatedForceGenerator(sfg4);*/
 
-
-	/*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg);
-	GomuGomuFG* sfg2 = new GomuGomuFG(Vector3(0, 0, 0), proyectil, 50, 10);
-	addCreatedForceGenerator(sfg2);
-	GomuGomuFG* sfg3 = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
-	addCreatedForceGenerator(sfg3);
-	GomuGomuFG* sfg4 = new GomuGomuFG(Vector3(0, 0, 0), proyectil3, 50, 10);
-	addCreatedForceGenerator(sfg4);*/
-
-	forceRegistriesSD.addRegistry(proyectil, sfg);
-	forceRegistriesSD.addRegistry(proyectil2, sfg2);
-	forceRegistriesSD.addRegistry(proyectil3, sfg3);
-	forceRegistriesSD.addRegistry(proyectil2, sfg4);
+	//forceRegistriesSD.addRegistry(proyectil, sfg);
+	//forceRegistriesSD.addRegistry(proyectil2, sfg2);
+	//forceRegistriesSD.addRegistry(proyectil3, sfg3);
+	//forceRegistriesSD.addRegistry(proyectil2, sfg4);
 }
 
 void SolidoRigidoSystem::sdGenerator() {
@@ -98,6 +66,9 @@ void SolidoRigidoSystem::sdGenerator() {
 		break;
 	case LluviaSD:
 		generateSDLluvia();
+		break;
+	case Lluvia2SD:
+		generateSDLluvia2();
 		break;
 	default:
 		break;
@@ -124,7 +95,62 @@ void SolidoRigidoSystem::generateSDFuente() {
 	float velSim = 5.0f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, {0.5,0.5,0.5,1}, false, false);
+	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 3, {0.5,0.5,0.5,1}, true, false, false);
+	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
+
+	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
+	//proyectil->getRigidDynamic()->addForce(initialVel);
+}
+
+void SolidoRigidoSystem::generateSDLluvia2() {
+	double velY = -2;
+	Vector3 initPos = { 0,origen.y,0 };
+	if (!normalDistribution) {
+		velY *= (_u(_mt) - 0.5);
+	}
+	else {
+		velY *= (_n(_mt));
+	}
+
+	//Configuracion de posicion aleatoria dentro de un margen
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Definimos una distribución uniforme de enteros entre 1 y 10 (inclusive)
+	std::uniform_int_distribution<> dis(1, 10);
+
+	// Generamos un número aleatorio
+	int random_number = dis(gen);
+
+	initPos.x = origen.x + random_number * 3;
+
+	random_number = dis(gen);
+
+	initPos.z = origen.z + random_number * 3;
+
+
+
+	float masa = 15.0f;
+	float velReal = 10.0f;
+	float velSim = 5.0f;
+	Vector3 initialVel(0, velY, 0);
+	Vector3 initialAcel(0, gravity, 0);
+	SolidoRigido* proyectil;
+
+	std::uniform_int_distribution<> dis2(1, 2);
+
+	random_number = dis2(gen);
+
+	if (random_number == 1) {
+		proyectil = createNewSD(initPos, { 0.5, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 5, { 0.5,0.5,0.5,1 }, true, false, false);
+	}
+	else {
+		proyectil = createNewSD(initPos, { 0.8, 0.8, 0.8 }, initialVel, initialAcel, CUBO, mPx, mScene, masa, 5, { 0.8,0.5,0.5,1 }, true, false, false);
+		masa *= 3;
+	}
+	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
+
+	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
 	//proyectil->getRigidDynamic()->addForce(initialVel);
 }
 
@@ -147,7 +173,7 @@ void SolidoRigidoSystem::generateSDLluvia() {
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, { 0.5,0.5,0.5,1 }, false, false);
+	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 3, { 0.5,0.5,0.5,1 }, true, false, false);
 	//proyectil->getRigidDynamic()->addForce(initialVel, physx::PxForceMode::eIMPULSE);
 	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
 
@@ -169,40 +195,28 @@ void SolidoRigidoSystem::updateSystem(double dt)
 	// Generamos un número aleatorio
 	int random_number = dis(gen);
 	int rand = std::rand();
-	if (random_number <= 75 && solidosRigidos.size() <= 100) {
+	if (random_number <= 75 && solidosRigidos.size() <= 300) {
 		sdGenerator();
 	}
 
 	forceRegistriesSD.updateForces(dt);
-	forceRegistriesSDMuelles.updateForces(dt);
-	for (auto it = solidosRigidos.begin(); it != solidosRigidos.end(); ) {
-		SolidoRigido* sd = *it;  // Obtener el puntero de la partícula
 
-		if (sd != nullptr) {  // Verifica que la partícula no sea nula
+	for (auto it = solidosRigidos.begin(); it != solidosRigidos.end();) {
+		SolidoRigido* sd = *it;
 
+		sd->update(dt);
 
-			//for (auto it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ) {
-			//	ForceGenerator* fG = *it2;  // Obtener el puntero del generador de fuerzas
-			//	fG->applyForce(sd);
-			//	fG->update(dt);
-			//	it2++;
-			//}
-
-			//particle->integrate(dt);  // Actualiza la partícula
-			//if (particle->getPos().y <= 0.0f || particle->toErase()) {
-			//	delete particle;  // Elimina la memoria de la partícula
-			//	it = particles.erase(it);  // Elimina la partícula del vector y actualiza el iterador
-			//}
-			//else {
-			//	++it;  // Solo avanza al siguiente elemento si no eliminaste el actual
-			//}
-			it++;
+		if (sd->ToErase()) {
+			forceRegistriesSD.remove(sd);
+			it = solidosRigidos.erase(it);
+			delete sd;
 		}
 		else {
-			it = solidosRigidos.erase(it);  // Si el puntero es nulo, lo eliminamos también
+			++it;
 		}
 	}
 }
+
 
 void SolidoRigidoSystem::pressKey(char key, const PxTransform& camera)
 {
@@ -218,80 +232,6 @@ void SolidoRigidoSystem::pressKey(char key, const PxTransform& camera)
 			forceRegistriesSD.addRegistry(e, fg4);
 		break;
 	}
-	case 'G':
-	{
-		forceGenerators[0]->SwitchOnOff();
-		break;
-	}
-	//Activacion de sistemas de viento
-	case 'J':
-	{
-		forceGenerators[1]->SwitchOnOff(); //IZQ
-		break;
-	}
-	case 'L':
-	{
-		forceGenerators[2]->SwitchOnOff(); //DER
-		break;
-	}
-	case 'K':
-	{
-		forceGenerators[3]->SwitchOnOff(); //ATRAS
-		break;
-	}
-	case 'I':
-	{
-		forceGenerators[4]->SwitchOnOff(); //ADELANTE
-		break;
-	}
-	case 'Z':
-	{
-		if (muelles.size() < 1) {
-			float distanciaMinima = 10000000000000000000; //Nos tenemos que quedar con la distancia mas corta, la que corresponde al punto de anclaje mas cercano
-			PxRigidStatic* puntoAnclajeCercano;
-
-			for (auto p : puntosAnclaje) {
-				Vector3 relative_pos_vector = (p->getGlobalPose().p - player->getPos());
-				float distancia = relative_pos_vector.magnitude();
-				if (distancia < distanciaMinima) {
-					distanciaMinima = distancia;
-					puntoAnclajeCercano = p;
-				}
-			}
-
-			SpringForceGenerator* sfg = new SpringForceGenerator(puntoAnclajeCercano->getGlobalPose().p, nullptr, nullptr, 150, 10);
-			//addCreatedForceGenerator(sfg);
-			muelles.push_back(sfg);
-			/*SpringForceGenerator* sfg2 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil, 50, 10);
-			addCreatedForceGenerator(sfg2);
-			SpringForceGenerator* sfg3 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil2, 50, 10);
-			addCreatedForceGenerator(sfg3);
-			SpringForceGenerator* sfg4 = new SpringForceGenerator(Vector3(0, 0, 0), nullptr, proyectil3, 50, 10);
-			addCreatedForceGenerator(sfg4);*/
-
-
-			/*GomuGomuFG* sfg = new GomuGomuFG(Vector3(0, 0, 0), proyectil2, 50, 10);
-			addCreatedForceGenerator(sfg);
-			GomuGomuFG* sfg2 = new GomuGomuFG(Vector3(0, 0, 0), proyectil, 50, 10);
-			addCreatedForceGenerator(sfg2);*/
-
-			forceRegistriesSDMuelles.addRegistry(player, sfg);
-			/*forceRegistriesSD.addRegistry(proyectil2, sfg2);
-			forceRegistriesSD.addRegistry(proyectil3, sfg3);
-			forceRegistriesSD.addRegistry(proyectil2, sfg4);*/
-			std::cout << "muelles Creados" << std::endl;
-		}
-		else {
-			std::cout << "no se pueden crear mas muelles" << std::endl;
-		}
-		break;
-	}
-	case 'X':
-	{
-		muelles.clear();
-		forceRegistriesSDMuelles.clearRegistries();
-		break;
-	}
 	default:
 		break;
 	}
@@ -299,9 +239,9 @@ void SolidoRigidoSystem::pressKey(char key, const PxTransform& camera)
 }
 
 SolidoRigido* SolidoRigidoSystem::createNewSD(Vector3 Pos, Vector3 Geo, Vector3 LinVel, Vector3 AngVel, FormaSolidoDinamico Type,
-	physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, Vector4 Color, bool ManualConfigLinVel, bool ManualConfigAngVel)
+	physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, double LifeTime, Vector4 Color, bool CanDie, bool ManualConfigLinVel, bool ManualConfigAngVel)
 {
-	SolidoRigido* sd = new SolidoRigido(Pos, Geo, LinVel, AngVel, Type, Px, Scene, Mass, Color, ManualConfigLinVel, ManualConfigAngVel);
+	SolidoRigido* sd = new SolidoRigido(Pos, Geo, LinVel, AngVel, Type, Px, Scene, Mass, LifeTime, Color, CanDie, ManualConfigLinVel, ManualConfigAngVel);
 	addCreatedSD(sd);
 	return sd;
 }

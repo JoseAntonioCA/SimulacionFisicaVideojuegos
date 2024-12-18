@@ -15,7 +15,7 @@
 
 using namespace std;
 
-enum Sistema{Fuente, Lluvia, Niebla};
+enum Sistema{Fuente, Lluvia, Niebla, Remolino};
 enum GeneradorFuerzas { Gravedad, Viento, Torbellino, Explosion, Muelle };
 
 class ParticlesSystem
@@ -35,6 +35,7 @@ public:
 	void generateParticleFuente();
 	void generateParticleLluvia();
 	void generateParticleNiebla();
+	void generateParticleRemolino();
 
 	void addCreatedParticle(Particle* particle) {
 		particles.push_back(particle);

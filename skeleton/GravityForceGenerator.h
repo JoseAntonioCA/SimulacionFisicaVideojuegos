@@ -25,6 +25,10 @@ public:
 			sd->getRigidDynamic()->addForce(force, physx::PxForceMode::eFORCE);
 		}
 	}
+
+	void reverseGravity() {
+		gravity *= -1;
+	}
 	void update(double deltaTime) {}
 	void update2(Vector3 v, float f) {}
 private:

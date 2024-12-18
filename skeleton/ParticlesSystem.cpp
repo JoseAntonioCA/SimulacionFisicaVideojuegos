@@ -17,10 +17,15 @@ void ParticlesSystem::initSystem()
 {
 	ForceGenerator* fg = createNewForceGenerator(Gravedad);
 	std::cout << "creada Gravedad" << std::endl;
+	if (tipoSistema == Remolino) {
+		ForceGenerator* fg2 = createNewForceGenerator(Torbellino);
+		std::cout << "creado Torbellino" << std::endl;
+
+	}
 	/*ForceGenerator* fg2 = createNewForceGenerator(Viento);
 	std::cout << "creado Viento" << std::endl;*/
-	ForceGenerator* fg4 = createNewForceGenerator(Explosion);
-	std::cout << "creada Explosion" << std::endl;
+	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
+	std::cout << "creada Explosion" << std::endl;*/
 	/*ForceGenerator* fg3 = createNewForceGenerator(Torbellino);
 	std::cout << "creado Torbellino" << std::endl;*/
 	/*ForceGenerator* fg4 = createNewForceGenerator(Explosion);
@@ -40,6 +45,9 @@ void ParticlesSystem::particlesGenerator() {
 		break;
 	case Niebla:
 		generateParticleNiebla();
+		break;
+	case Remolino:
+		generateParticleRemolino();
 		break;
 	default:
 		break;
@@ -62,11 +70,28 @@ void ParticlesSystem::generateParticleFuente() {
 	}
 
 	float masa = 5.0f;
+	float radius = 0.25f;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Definimos una distribución uniforme de enteros entre 1 y 3 (inclusive)
+	std::uniform_int_distribution<> dis(1, 3);
+
+	// Generamos un número aleatorio
+	int random_number = dis(gen);
+	int rand = std::rand();
+	if (random_number == 3) {
+		masa *= 2;
+		radius *= 2;
+	}
+
+
 	float velReal = 10.0f;
 	float velSim = 5.0f;
 	Vector3 initialVel(velX, velY, velZ);
 	Vector3 initialAcel(0, gravity, 0);
-	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 2, velReal, velSim);
+	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, radius, masa, gravity, 0.98, 2, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleLluvia() {
@@ -84,11 +109,27 @@ void ParticlesSystem::generateParticleLluvia() {
 	}
 
 	float masa = 5.0f;
+	float radius = 0.25f;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Definimos una distribución uniforme de enteros entre 1 y 3 (inclusive)
+	std::uniform_int_distribution<> dis(1, 3);
+
+	// Generamos un número aleatorio
+	int random_number = dis(gen);
+	int rand = std::rand();
+	if (random_number == 3) {
+		masa *= 3;
+		radius *= 3;
+	}
+
 	float velReal = 10.0f;
 	float velSim = 5.0f;
 	Vector3 initialVel(0, velY, 0);
 	Vector3 initialAcel(0, gravity, 0);
-	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, 0.25f, masa, gravity, 0.98, 10, velReal, velSim);
+	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, radius, masa, gravity, 0.98, 10, velReal, velSim);
 }
 
 void ParticlesSystem::generateParticleNiebla() {
@@ -121,6 +162,47 @@ void ParticlesSystem::generateParticleNiebla() {
 	Particle* particula = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, false, 0.1f, masa, gravity*0.0095f, 0.98, 2, 1.0f, 0.5f);
 }
 
+void ParticlesSystem::generateParticleRemolino()
+{
+	double velX = 1;
+	double velY = 0.5f;
+	double velZ = 1;
+	if (!normalDistribution) {
+		velX *= (_u(_mt) - 0.5);
+		velY *= (_u(_mt) - 0.5);
+		velZ *= (_u(_mt) - 0.5);
+	}
+	else {
+		velX *= (_n(_mt));
+		velY *= (_n(_mt));
+		velZ *= (_n(_mt));
+	}
+
+	float masa = 5.0f;
+	float radius = 0.5f;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Definimos una distribución uniforme de enteros entre 1 y 3 (inclusive)
+	std::uniform_int_distribution<> dis(1, 3);
+
+	// Generamos un número aleatorio
+	int random_number = dis(gen);
+	int rand = std::rand();
+	if (random_number == 3) {
+		masa *= 2;
+		radius *= 2;
+	}
+
+
+	float velReal = 10.0f;
+	float velSim = 5.0f;
+	Vector3 initialVel(velX, velY, velZ);
+	Vector3 initialAcel(0, gravity, 0);
+	Particle* proyectil = createNewParticle(Esfera, origen, initialVel, initialAcel, true, true, simulado, radius, masa, gravity, 0.98, 2, velReal, velSim);
+}
+
 void ParticlesSystem::updateSystem(double dt)
 {
 	std::random_device rd;
@@ -149,7 +231,7 @@ void ParticlesSystem::updateSystem(double dt)
 			}
 			
 			particle->integrate(dt);  // Actualiza la partícula
-			if (particle->getPos().y <= 0.0f || particle->toErase()) {
+			if (/*particle->getPos().y <= 0.0f ||*/ particle->toErase()) {
 				delete particle;  // Elimina la memoria de la partícula
 				it = particles.erase(it);  // Elimina la partícula del vector y actualiza el iterador
 			}
@@ -219,7 +301,7 @@ ForceGenerator* ParticlesSystem::createNewForceGenerator(GeneradorFuerzas type)
 		forceGen = new WindForceGenerator(Vector3(30,0,0), 2, 0);
 		break;
 	case Torbellino:
-		forceGen = new WhirlwindForceGenerator(Vector3(0, 10, 0), 30);
+		forceGen = new WhirlwindForceGenerator(origen, 50);
 		break;
 	case Explosion:
 		forceGen = new ExplosionForceGenerator(Vector3(0, 0, 0), 1000, 2000, 0.01f);

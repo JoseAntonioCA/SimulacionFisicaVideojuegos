@@ -17,8 +17,8 @@ class SolidoRigido
 {
 public:
     SolidoRigido(Vector3 Pos, Vector3 Geo, Vector3 LinVel, Vector3 AngVel, FormaSolidoDinamico Type,
-        physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, Vector4 Color, bool ManualConfigLinVel, bool ManualConfigAngVel)
-        : mScene(Scene), masa(Mass) {
+        physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, double LifeTime, Vector4 Color, bool CanDie, bool ManualConfigLinVel, bool ManualConfigAngVel)
+        : mScene(Scene), masa(Mass), lifeTime(LifeTime), canDie(CanDie), toErase(false) {
 
         rigidDynamic = Px->createRigidDynamic(physx::PxTransform(Pos));
         physx::PxShape* shape;
@@ -29,11 +29,11 @@ public:
         switch (Type) {
         case CUBO:
             shape = CreateShape(physx::PxBoxGeometry(Geo.x, Geo.y, Geo.z));
-            calcularMomentosDeInerciaCubo(Geo); // Calcular momentos de inercia manualmente
+            //calcularMomentosDeInerciaCubo(Geo); // Calcular momentos de inercia manualmente
             break;
         case ESFERA:
             shape = CreateShape(physx::PxSphereGeometry(Geo.x)); // X = radio
-            calcularMomentosDeInerciaEsfera(Geo.x);
+            //calcularMomentosDeInerciaEsfera(Geo.x);
             break;
         case PLANO:
             shape = CreateShape(physx::PxPlaneGeometry());
@@ -46,15 +46,15 @@ public:
         }
 
         rigidDynamic->attachShape(*shape);
-        std::cout << "Masa antes de setMass: " << rigidDynamic->getMass() << "\n";
+        //std::cout << "Masa antes de setMass: " << rigidDynamic->getMass() << "\n";
         rigidDynamic->setMass(masa);
-        std::cout << "Masa después de setMass: " << rigidDynamic->getMass() << "\n";
+        //std::cout << "Masa después de setMass: " << rigidDynamic->getMass() << "\n";
 
         // Dejar que PhysX calcule automáticamente la inercia
         //physx::PxRigidBodyExt::updateMassAndInertia(*rigidDynamic, masa);
 
         // Comparar los valores calculados por PhysX con los manuales
-        compararInercias();
+        //compararInercias();
 
         if (ManualConfigLinVel) {
             rigidDynamic->setLinearVelocity(LinVel);
@@ -65,7 +65,6 @@ public:
 
         renderItem = new RenderItem(shape, rigidDynamic, Color);
         mScene->addActor(*rigidDynamic);
-        std::cout << "Masa después de setMass: " << rigidDynamic->getMass() << "\n";
         //mScene->setGravity(physx::PxVec3(0, 0, 0));
         //rigidDynamic->addForce({ 10000,0,0 }, physx::PxForceMode::eIMPULSE);
     }
@@ -78,8 +77,22 @@ public:
         }
     }
 
+    void update(double dt) {
+        if (canDie) {
+            lifeTime -= dt;
+
+            if (lifeTime <= 0.0) {
+                toErase = true;
+            }
+        }
+    }
+
     physx::PxRigidDynamic* getRigidDynamic() {
         return rigidDynamic;
+    }
+
+    bool ToErase() {
+        return toErase;
     }
 
     float getMasa() {
@@ -98,6 +111,9 @@ public:
 protected:
     physx::PxScene* mScene; // Puntero de la escena a la que está atachado el objeto
     float masa;
+    bool canDie;
+    bool toErase;
+    double lifeTime;
     RenderItem* renderItem; // Render item para el renderizado del objeto
     physx::PxRigidDynamic* rigidDynamic; // El tipo de objeto que crearemos, en este caso un solido rigido dinamico
     physx::PxVec3 momentosInerciaManual; // Para guardar los momentos de inercia calculados manualmente

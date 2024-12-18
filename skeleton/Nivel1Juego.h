@@ -6,6 +6,8 @@
 #include <list>
 #include "SolidoRigido.h"
 #include "Player.h"
+#include "ParticlesSystem.h"
+#include "SolidoRigidoSystem.h"
 
 #include "ForceGenerator.h"
 #include "GravityForceGenerator.h"
@@ -20,26 +22,18 @@
 
 using namespace std;
 
-enum SistemaSD { FuenteSD, LluviaSD, Lluvia2SD};
-enum GeneradorFuerzasSD { GravedadSD, VientoSD, TorbellinoSD, ExplosionSD, MuelleSD };
-
-class SolidoRigidoSystem
+class Nivel1Juego
 {
 public:
-	SolidoRigidoSystem() {};
-	SolidoRigidoSystem(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, physx::PxMaterial* MGMaterial, float Gravity, bool Simulado, bool NormalDistribution, SistemaSD type);
-	~SolidoRigidoSystem();
+	Nivel1Juego() {};
+	Nivel1Juego(Vector3 Origin, physx::PxPhysics* Px, physx::PxScene* Scene, physx::PxMaterial* MGMaterial, float Gravity, bool Simulado);
+	~Nivel1Juego();
 
-	void initSystem();
+	void initLevel();
 
-	void updateSystem(double dt);
+	void updateLevel(double dt);
 
 	void pressKey(char key, const physx::PxTransform& camera);
-
-	void sdGenerator();
-	void generateSDFuente();
-	void generateSDLluvia();
-	void generateSDLluvia2();
 
 	void addCreatedSD(SolidoRigido* sd) {
 		solidosRigidos.push_back(sd);
@@ -55,38 +49,38 @@ public:
 	Player* createNewPlayer(Vector3 Pos, Vector3 Geo, Vector3 LinVel, Vector3 AngVel, FormaSolidoDinamico Type,
 		physx::PxPhysics* Px, physx::PxScene* Scene, float Mass, Vector4 Color, bool ManualConfigLinVel, bool ManualConfigAngVel);
 
+	ParticlesSystem* createNewParticlesSystem(Vector3 Origin, float Gravity, float TimeSpawn, bool Simulado, bool NormalDistribution, Sistema type);
 
-	ForceGenerator* createNewForceGenerator(GeneradorFuerzasSD type);
+
 private:
 	physx::PxPhysics* mPx;
 	physx::PxScene* mScene;
 	physx::PxMaterial* mGMaterial;
 
-	
+	vector<SpringForceGenerator*> muelles;
 
+	vector<PxRigidStatic*> puntosAnclaje;
+	vector<RenderItem*> rendersAnclaje;
+
+
+	vector<SolidoRigidoSystem*> systemasSolidosRigidos;
 	vector<SolidoRigido*> solidosRigidos;
 	vector<ForceGenerator*> forceGenerators;
+
+	vector<ParticlesSystem*> particlesSystems;
+	
 	GravityForceGenerator* gravedadG;
 
+	Player* player;
 
 	ForceRegistrySD forceRegistriesSD;
-
-	bool normalDistribution;
+	ForceRegistrySD forceRegistriesSDMuelles;
 
 	bool simulado;
 
 	float gravity;
 
 	Vector3 origen;
-	SistemaSD tipoSistema;
-
-	mt19937 _mt;
-	uniform_real_distribution<double> _u{ 0,1 };
-	normal_distribution<double> _n{ 0, 0.5f };
-
-	// parametros para modificar el origen en la niebla
-	uniform_real_distribution<double> _uNiebla{ 0,10 };
-	normal_distribution<double> _nNiebla{ 0, 10 };
 
 	string _name;
 };

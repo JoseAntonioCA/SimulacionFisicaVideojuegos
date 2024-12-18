@@ -9,6 +9,7 @@
 #include "SolidoRigido.h"
 #include "PhysicsScene.h"
 #include "SolidoRigidoSystem.h"
+#include "Nivel1Juego.h"
 
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
@@ -40,6 +41,7 @@ PxSphereGeometry* gSphere = new PxSphereGeometry(10);
 Particle* particula;
 PhysicsScene* escena1;
 SolidoRigidoSystem* sdSys;
+Nivel1Juego* level1;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -65,17 +67,6 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	PxRigidStatic* solidoStatico = gPhysics->createRigidStatic(physx::PxTransform(0, -20, 0));
-	PxShape* shape = CreateShape(PxBoxGeometry(100, 0.1, 100));
-	solidoStatico->attachShape(*shape);
-	gScene->addActor(*solidoStatico);
-	RenderItem* item = new RenderItem(shape, solidoStatico, { 1,1,1,1 });
-
-	PxRigidStatic* solidoStatico2 = gPhysics->createRigidStatic(physx::PxTransform(-100, -20, 0));
-	PxShape* shape2 = CreateShape(PxBoxGeometry(0.1, 100, 100));
-	solidoStatico2->attachShape(*shape2);
-	gScene->addActor(*solidoStatico2);
-	RenderItem* item2 = new RenderItem(shape2, solidoStatico2, { 0.1,0.1,0.1,1 });
 
 	/*SolidoRigido* solidoDinamico = new SolidoRigido({ 0,0,0 }, { 10,10,10 }, { 0,0,0 }, { 0,0,0 }, ESFERA, gPhysics, gScene, 1, { 0.1,0.1,0.1,1 }, false, false);*/
 
@@ -89,11 +80,12 @@ void initPhysics(bool interactive)
 	gScene->addActor(*solidoDinamico);
 	RenderItem* item2 = new RenderItem(shape2, solidoDinamico, { 0.1,0.1,0.1,1 });*/
 
-
-	sdSys = new SolidoRigidoSystem({ 0,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, LluviaSD);
+	level1 = new Nivel1Juego({ 0,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false);
+	level1->initLevel();
+	sdSys = new SolidoRigidoSystem({ 100,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, Lluvia2SD);
 	sdSys->initSystem();
-	escena1 = new PhysicsScene(false, 9.8f);
-	escena1->initScene();
+	/*escena1 = new PhysicsScene(false, 9.8f);
+	escena1->initScene();*/
 	}
 
 
@@ -103,7 +95,8 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	escena1->updateScene(t);
+	level1->updateLevel(t);
+	//escena1->updateScene(t);
 	sdSys->updateSystem(t);
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -130,8 +123,9 @@ void cleanupPhysics(bool interactive)
 	
 	gFoundation->release();
 
-	delete escena1;
+	//delete escena1;
 	delete sdSys;
+	delete level1;
 	}
 
 // Function called when a key is pressed
@@ -139,8 +133,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 	
-	escena1->pressKey(key, camera);
+	//escena1->pressKey(key, camera);
 	sdSys->pressKey(key, camera);
+	level1->pressKey(key, camera);
 
 	switch(toupper(key))
 	{

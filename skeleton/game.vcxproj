@@ -263,6 +263,7 @@
     <ClCompile Include="GomuGomuFG.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Nivel1Juego.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticlesSystem.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="ForceRegistrySD.h" />
     <ClInclude Include="GomuGomuFG.h" />
     <ClInclude Include="GravityForceGenerator.h" />
+    <ClInclude Include="Nivel1Juego.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticlesSystem.h" />
     <ClInclude Include="PhysicsScene.h" />
