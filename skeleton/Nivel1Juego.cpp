@@ -72,6 +72,13 @@ void Nivel1Juego::initLevel()
 	RenderItem* itemR08 = new RenderItem(shape08, suelo5, { 1,1,1,1 });
 
 
+	PxRigidStatic* techo2 = mPx->createRigidStatic(physx::PxTransform(1050, 322, 0));
+	PxShape* shape09 = CreateShape(PxBoxGeometry(50, 0.1, 100));
+	techo2->attachShape(*shape09);
+	mScene->addActor(*techo2);
+	RenderItem* itemR09 = new RenderItem(shape09, techo2, { 1,1,1,1 });
+
+
 	//Puntos de anclaje
 
 	PxRigidStatic* puntoAncla = mPx->createRigidStatic(physx::PxTransform(200, 50, 0));
@@ -209,7 +216,7 @@ void Nivel1Juego::initLevel()
 
 	/*ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
 	std::cout << "creado Viento" << std::endl;*/
-	player = createNewPlayer({ 1400,100,0 }, { 5, 5, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 5, { 0.8,0.8,0.8,1 }, false, false);
+	player = createNewPlayer({ 0,100,0 }, { 5, 5, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 5, { 0.8,0.8,0.8,1 }, false, false);
 	physx::PxRigidBodyExt::updateMassAndInertia(*player->getRigidDynamic(), 5);
 
 	for (auto e : forceGenerators) {
@@ -281,14 +288,14 @@ void Nivel1Juego::pressKey(char key, const PxTransform& camera)
 	{
 	case 'G':
 	{
-		//switch de la gravedad
-		gravedadG->SwitchOnOff();
+		//Invierte la gravedad
+		gravedadG->reverseGravity();
 		break;
 	}
 	case 'H':
 	{
-		//Invierte la gravedad
-		gravedadG->reverseGravity();
+		//switch de la gravedad
+		//gravedadG->SwitchOnOff();
 		break;
 	}
 	case 'F':
