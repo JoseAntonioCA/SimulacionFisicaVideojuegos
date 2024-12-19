@@ -98,7 +98,7 @@ void SolidoRigidoSystem::generateSDFuente() {
 	SolidoRigido* proyectil = createNewSD(origen, { 1, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 3, {0.5,0.5,0.5,1}, true, false, false);
 	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
 
-	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
+	forceRegistriesSD.addRegistry(proyectil, gravedadG);
 	//proyectil->getRigidDynamic()->addForce(initialVel);
 }
 
@@ -142,15 +142,15 @@ void SolidoRigidoSystem::generateSDLluvia2() {
 	random_number = dis2(gen);
 
 	if (random_number == 1) {
-		proyectil = createNewSD(initPos, { 0.5, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 5, { 0.5,0.5,0.5,1 }, true, false, false);
+		proyectil = createNewSD(initPos, { 0.5, 1, 1 }, initialVel, initialAcel, ESFERA, mPx, mScene, masa, 10, { 0.5,0.5,0.5,1 }, true, false, false);
 	}
 	else {
-		proyectil = createNewSD(initPos, { 0.8, 0.8, 0.8 }, initialVel, initialAcel, CUBO, mPx, mScene, masa, 5, { 0.8,0.5,0.5,1 }, true, false, false);
+		proyectil = createNewSD(initPos, { 0.8, 0.8, 0.8 }, initialVel, initialAcel, CUBO, mPx, mScene, masa, 10, { 0.8,0.5,0.5,1 }, true, false, false);
 		masa *= 3;
 	}
 	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
 
-	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
+	forceRegistriesSD.addRegistry(proyectil, gravedadG);
 	//proyectil->getRigidDynamic()->addForce(initialVel);
 }
 
@@ -177,7 +177,7 @@ void SolidoRigidoSystem::generateSDLluvia() {
 	//proyectil->getRigidDynamic()->addForce(initialVel, physx::PxForceMode::eIMPULSE);
 	physx::PxRigidBodyExt::updateMassAndInertia(*proyectil->getRigidDynamic(), masa);
 
-	forceRegistriesSD.addRegistry(proyectil, forceGenerators[0]);
+	forceRegistriesSD.addRegistry(proyectil, gravedadG);
 	/*for (auto e : forceGenerators) {
 		forceRegistriesSD.addRegistry(proyectil, e);
 	}*/

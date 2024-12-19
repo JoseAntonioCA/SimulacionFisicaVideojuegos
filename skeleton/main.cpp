@@ -82,8 +82,8 @@ void initPhysics(bool interactive)
 
 	level1 = new Nivel1Juego({ 0,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false);
 	level1->initLevel();
-	sdSys = new SolidoRigidoSystem({ 100,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, Lluvia2SD);
-	sdSys->initSystem();
+	/*sdSys = new SolidoRigidoSystem({ 100,10,0 }, gPhysics, gScene, gMaterial, 9.8f, false, true, Lluvia2SD);
+	sdSys->initSystem();*/
 	/*escena1 = new PhysicsScene(false, 9.8f);
 	escena1->initScene();*/
 	}
@@ -97,7 +97,7 @@ void stepPhysics(bool interactive, double t)
 	PX_UNUSED(interactive);
 	level1->updateLevel(t);
 	//escena1->updateScene(t);
-	sdSys->updateSystem(t);
+	/*sdSys->updateSystem(t);*/
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -124,7 +124,7 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	//delete escena1;
-	delete sdSys;
+	//delete sdSys;
 	delete level1;
 	}
 
@@ -134,7 +134,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	PX_UNUSED(camera);
 	
 	//escena1->pressKey(key, camera);
-	sdSys->pressKey(key, camera);
+	//sdSys->pressKey(key, camera);
 	level1->pressKey(key, camera);
 
 	switch(toupper(key))

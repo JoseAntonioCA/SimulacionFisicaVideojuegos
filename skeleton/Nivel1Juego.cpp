@@ -65,6 +65,12 @@ void Nivel1Juego::initLevel()
 	mScene->addActor(*suelo4);
 	RenderItem* itemR07 = new RenderItem(shape07, suelo4, { 1,1,1,1 });
 
+	PxRigidStatic* suelo5 = mPx->createRigidStatic(physx::PxTransform(1750, 0, 0));
+	PxShape* shape08 = CreateShape(PxBoxGeometry(200, 0.1, 100));
+	suelo5->attachShape(*shape08);
+	mScene->addActor(*suelo5);
+	RenderItem* itemR08 = new RenderItem(shape08, suelo5, { 1,1,1,1 });
+
 
 	//Puntos de anclaje
 
@@ -128,6 +134,17 @@ void Nivel1Juego::initLevel()
 
 	Vector3 pSysPos4 = { 235, 80, -15 };
 
+	Vector3 pSysPos5 = { 1700, 80, -100 };
+
+	Vector3 pSysPos6 = { 1700, 80, -60 };
+
+	Vector3 pSysPos7 = { 1700, 80, -20 };
+
+	Vector3 pSysPos8 = { 1700, 80, 20 };
+
+	Vector3 pSysPos9 = { 1700, 80, 60 };
+
+
 	for (int i = 0; i < 2; i++) {
 		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos4, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
 		systema->initSystem();
@@ -135,6 +152,36 @@ void Nivel1Juego::initLevel()
 		pSysPos4.x += 100;
 	}
 
+	for (int i = 0; i < 3; i++) {
+		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos5, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
+		systema->initSystem();
+		systemasSolidosRigidos.push_back(systema);
+		pSysPos5.x += 80;
+	}
+	for (int i = 0; i < 3; i++) {
+		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos6, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
+		systema->initSystem();
+		systemasSolidosRigidos.push_back(systema);
+		pSysPos6.x += 80;
+	}
+	for (int i = 0; i < 3; i++) {
+		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos7, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
+		systema->initSystem();
+		systemasSolidosRigidos.push_back(systema);
+		pSysPos7.x += 80;
+	}
+	for (int i = 0; i < 3; i++) {
+		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos8, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
+		systema->initSystem();
+		systemasSolidosRigidos.push_back(systema);
+		pSysPos8.x += 80;
+	}
+	for (int i = 0; i < 3; i++) {
+		SolidoRigidoSystem* systema = new SolidoRigidoSystem(pSysPos9, mPx, mScene, mGMaterial, 9.8f, false, true, Lluvia2SD);
+		systema->initSystem();
+		systemasSolidosRigidos.push_back(systema);
+		pSysPos9.x += 80;
+	}
 
 	//Gravedad
 
@@ -144,20 +191,27 @@ void Nivel1Juego::initLevel()
 
 	//Generadores de viento en las 4 direcciones
 
-	ForceGenerator* forceGenV1 = new WindForceGenerator(Vector3(-1000, 0, 0), 2, 0); // Izq
+	ForceGenerator* forceGenV1 = new WindForceGenerator(Vector3(-10000, 0, 0), 2, 0); // Izq
 	addCreatedForceGenerator(forceGenV1);
-	ForceGenerator* forceGenV2 = new WindForceGenerator(Vector3(1000, 0, 0), 2, 0); // Der
+	ForceGenerator* forceGenV2 = new WindForceGenerator(Vector3(10000, 0, 0), 2, 0); // Der
 	addCreatedForceGenerator(forceGenV2);
-	ForceGenerator* forceGenV3 = new WindForceGenerator(Vector3(0, 0, 1000), 2, 0); // Atras
+	ForceGenerator* forceGenV3 = new WindForceGenerator(Vector3(0, 0, 10000), 2, 0); // Atras
 	addCreatedForceGenerator(forceGenV3);
-	ForceGenerator* forceGenV4 = new WindForceGenerator(Vector3(0, 0, -1000), 2, 0); // Adelante
+	ForceGenerator* forceGenV4 = new WindForceGenerator(Vector3(0, 0, -10000), 2, 0); // Adelante
 	addCreatedForceGenerator(forceGenV4);
 
+	//Obstaculos
+
+	SolidoRigido* solidoDinamico = createNewSD({ 1050,150,0 }, { 3, 160, 50 }, { 0,0,0 }, { 0,0,0 }, CUBO, mPx, mScene, 0.1, 100, { 0,0,0,1 }, false, false, false);
+	physx::PxRigidBodyExt::updateMassAndInertia(*solidoDinamico->getRigidDynamic(), 0.1);
+	forceRegistriesSD.addRegistry(solidoDinamico, gravedadG);
 
 
 	/*ForceGenerator* fg2 = createNewForceGenerator(VientoSD);
 	std::cout << "creado Viento" << std::endl;*/
-	player = createNewPlayer({ 0,100,0 }, { 5, 5, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 300, { 0.8,0.8,0.8,1 }, false, false);
+	player = createNewPlayer({ 1400,100,0 }, { 5, 5, 5 }, { 0,0,0 }, { 0,0,0 }, ESFERA, mPx, mScene, 5, { 0.8,0.8,0.8,1 }, false, false);
+	physx::PxRigidBodyExt::updateMassAndInertia(*player->getRigidDynamic(), 5);
+
 	for (auto e : forceGenerators) {
 		forceRegistriesSD.addRegistry(player, e);
 	}
@@ -202,7 +256,6 @@ void Nivel1Juego::updateLevel(double dt)
 		// rendersAnclaje[i]->updateColor(); // Solo si tu motor lo requiere
 	}
 
-
 	forceRegistriesSD.updateForces(dt);
 	forceRegistriesSDMuelles.updateForces(dt);
 	for (auto it = solidosRigidos.begin(); it != solidosRigidos.end();) {
@@ -241,7 +294,7 @@ void Nivel1Juego::pressKey(char key, const PxTransform& camera)
 	case 'F':
 	{
 		//Invierte la gravedad
-		player->jump(5000);
+		player->jump(50000);
 		break;
 	}
 	//Activacion de sistemas de viento
@@ -281,7 +334,7 @@ void Nivel1Juego::pressKey(char key, const PxTransform& camera)
 			}
 
 			if (distanciaMinima < 80) {
-				SpringForceGenerator* sfg = new SpringForceGenerator(puntoAnclajeCercano->getGlobalPose().p, nullptr, nullptr, 200, 10);
+				SpringForceGenerator* sfg = new SpringForceGenerator(puntoAnclajeCercano->getGlobalPose().p, nullptr, nullptr, 2000, 10);
 
 				muelles.push_back(sfg);
 				forceRegistriesSDMuelles.addRegistry(player, sfg);
